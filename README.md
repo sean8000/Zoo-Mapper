@@ -1,7 +1,7 @@
 # Zoo Mapper
 
 ## About
-This pyhton program is a resource to go along with ZooMonitor© and other animal data collection applications. ZooMapper creates plots for 2D and 3D datasets, allows for interactive viewing and filtering of data, and can perform calculations for distances between animals. 
+This python program is a resource to go along with ZooMonitor© and other animal data collection applications. ZooMapper creates plots for 2D and 3D datasets, allows for interactive viewing and filtering of data, and can perform calculations for distances between animals. 
 
 ### File Structure
 - `/data`: folder to contain data files, either as .xlsx or .csv
