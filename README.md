@@ -32,7 +32,7 @@ First, you will need to install a Python version newer than 3.6. We reccoment in
 If you are using a Windows system, open up the command prompt (seach cmd in the serach bar). Start by cloning this repository by running `git clone repo_link_here`. Then do `cd sezarc` and press enter to move into the project directory. Here, execute the command `pip install -r requirements.txt`. This will install the required packages that were listed above. Now you are all set to get ready to run the application.
 
 ### For Mac/Linux
-If you are using a Mac or Linux system, open a unix shell. Start by cloning this repository by running `git clone repo_link_here`. Then do `cd sezarc` and press enter to move into the project directory. Here, execute the command `pip install -r requirements.txt`. This will install the required packages that were listed above. Now you are all set to get ready to run the application.
+If you are using a Mac or Linux system, open a unix shell. Start by cloning this repository by running `git clone https://github.com/channum/Zoo-Mapper.git`. Then do `cd sezarc` and press enter to move into the project directory. Here, execute the command `pip install -r requirements.txt`. This will install the required packages that were listed above. Now you are all set to get ready to run the application.
 
 ## Running the Program
 First, navigate from the main sezarc directory to the directory `/src/main` by running `cd src/main`. Then, simply execute `python zoo.py`.
