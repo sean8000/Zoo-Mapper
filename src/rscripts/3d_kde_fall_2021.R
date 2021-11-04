@@ -1,37 +1,95 @@
 library(ks)
 library(rgl)
 library(misc3d)
-library(sm)
-library(rpanel)
-library(maptools)
-library(spatstat)
+library(dplyr)
+library(htmlwidgets)
+library(ggplot2)
+library(arcgisbinding)
 library(sf)
 
+options(stringsAsFactors=FALSE)
 
-# Read shark 1205 data for depth, long, and lat into shark_1205
-shark_1205 <- read.csv("C:/Users/Kevin/Documents/R/shark_1205.csv")[ ,c('DepthM', 'LongUTM', 'LatUTM')]
+arc.check_product()
 
-# shape <- st_read(file.choose())
+# Define Functions
+calcKernelVol <- function(fhat, perc) { # Calculates perc% kernel volume
+  ct <- contourLevels(fhat, cont=perc, approx=TRUE)
+  vol.voxel <- prod(sapply(fhat$eval.points, diff)[1,]) # Calculate volume of single voxel
+  no.voxel <- sum(fhat$estimate>ct) # Calculate number of voxels
+  vol <- no.voxel*vol.voxel # Calculate total volume as product
+  return(vol) }
 
-#print(shape)
+calcIntersect <- function(fhat1, fhat2, perc) { # Calculates volume of intersection of perc% volumes
+  ct1 <- contourLevels(fhat1, cont=perc, approx=TRUE) 
+  ct2 <- contourLevels(fhat2, cont=perc, approx=TRUE) 
+  vol.voxel <- prod(sapply(fhat1$eval.points, diff)[1,]) 
+  no.voxel <- sum(fhat1$estimate>ct1 & fhat2$estimate>ct2) 
+  intersect <- no.voxel*vol.voxel
+  return(intersect) }
 
-x <- shark_1205$LongUTM
-y <- shark_1205$LatUTM
-z <- shark_1205$DepthM
+genLabel <- function(m, n, pilot) { # Generate label for KDE settings
+  return(paste("M",m,",N",n,",",pilot,sep="")) }
 
-mx <- x/1000
-my <- y/1000
-mz <- z/1000
+KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, opacitySingle, display2D){
+  band <- Hpi(data, nstage=n, pilot=pilot)*m # Generate bandwith matrix
+  fhat <- kde(data, H=band) # Generate KDE
+  if(typeof(fhat$x) == "list"){
+    fhat$x <- data.matrix(fhat$x)
+  }
+  if(if2D){
+    imgName <- paste(imgDir, "/", genLabel(m,n,pilot), ".html", sep="")
+    png(imgName)
+    plot(fhat, display=display2D, cont=percs, asp=1, col=colorSingle)
+    dev.off()
+  }
+  else{
+    imgName <- paste(imgDir, "/", genLabel(m,n,pilot), "lhtml", sep="")
+    plot(fhat, display="rgl", cont=percs, asp=1, col=colorSingle, alpha=opacitySingle)
+    scene <- scene3d()
+    saveWidget(rglwidget(scene), file=imgName)
+    rgl.close()
+  }
+  vols <- vector()
+  for(perc in percs){
+    vols <- append(vols, calcKernelVol(fhat,perc))
+  }
+  return(vols)
+}
 
- with(shark_1205, {
-  d <- kde3d(x, y, z, h=0.2, n=100, lims=c(range(x), range(y), range(z)))
-  contour3d(d$d, 0.04, d$x, d$y, d$z, color = "red", color2="gray", scale=TRUE)
- })
+# load data
+raw_shark_data <- arc.open("C:/Users/Kevin/Documents/CISC498/MarinelandDemo/Marineland Demo/Marineland_ZooMonitor_3D_MBV_Depths.shp")
+shark_data_df<- arc.select(shark_data)
 
-m <- cbind(x,y,z)
-sm.density(m, panel=TRUE, panel.plot = TRUE)
+# pre-processing
+shark_data = select(shark_data_df, "UTMx", "UTMy", "DepthM_MBV")
+colnames(shark_data) <- c("X", "Y", "Z")
+shark_data <- na.omit(shark_data)
 
-p3 <- pp3(x,y,z, as.box3(range(x), range(y), range(z)))
-dists <- nndist.pp3(p3)
 
-# writePointsShape(dists, file.choose())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

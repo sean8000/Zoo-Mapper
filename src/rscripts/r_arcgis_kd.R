@@ -7,13 +7,14 @@ library(maptools)
 library(spatstat)
 library(sf)
 library(arcgisbinding)
+library(csv)
 
 arc.check_product()
- shark_data <- arc.open("C:/Users/Kevin/Documents/CISC498/MarinelandDemo/Marineland Demo/Marineland_ZooMonitor_3D_MBV_Depths.shp")
-# shark_data <- arc.open("C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/main/resources/FinalShark_1205_forR.csv")
+shark_data <- arc.open("C:/Users/Kevin/Documents/CISC498/MarinelandDemo/Marineland Demo/Marineland_ZooMonitor_3D_MBV_Depths.shp")
+# shark_data_df <- read.csv("C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/main/resources/FinalShark_1205_forR.csv")
 shark_data_df <- arc.select(shark_data)
 
-# View(shark_data_df)
+#View(shark_data_df)
 
 x <- shark_data_df$UTMx
 y <- shark_data_df$UTMy
@@ -26,7 +27,7 @@ mz <- z/1000
 
 
 with(shark_data_df, {
-  d <- kde3d(mx, my, mz, h=0.1, n=100, lims=c(range(mx), range(my), range(mz)))
+  d <- kde3d(x, y, z, h=0.1, n=100, lims=c(range(x), range(y), range(z)))
   contour3d(d$d, 0.01, d$x, d$y, d$z, color = "red", color2="gray", scale=TRUE)
 })
 
@@ -39,4 +40,6 @@ shark_data_df$nndist <- dists
 
 # arc.write("C:/Users/Kevin/Documents/CISC498/shark-test.shp", shark_data_df)
 
-arc.write("C:/Users/Kevin/Documents/CISC498/shark-test.shp", shark_data_df)
+#arc.write("C:/Users/Kevin/Documents/CISC498/shark-test.shp", shark_data_df)
+
+arc.write(file.choose(), shark_data_df)

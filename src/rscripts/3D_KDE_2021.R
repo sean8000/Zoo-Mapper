@@ -61,6 +61,7 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
   for(perc in percs) { vols <- append(vols, calcKernelVol(fhat,perc)) } # Store calculated volumes
   return(vols) }
 
+
 KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D) { # Tries KDE with given settings for two volumes
   band1 <- Hpi(data1, nstage=n, pilot=pilot)*m
   band2 <- Hpi(data2, nstage=n, pilot=pilot)*m
@@ -160,12 +161,12 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 # Set Parameters
 
 ## Data Parameters
-path <- "C:/Users/Kevin/Documents/R/FinalShark_1205_forR.xlsx"        # Path of data
+path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 2D Distances.xlsx"        # Path of data
 sheet <- 1                                                            # Sheet number (starts at 1) 
-nameCol <- "Focal_Shar"                                               # Name column
-xCol <- "LongUTM"                                                     # X-coordinate column
-yCol <- "LatUTM"                                                      # Y-coordinate column
-zCol <- "DepthM"                                                      # Z-coordinate column
+nameCol <- "Focal Name"                                               # Name column
+xCol <- "UTMLongX"                                                     # X-coordinate column
+yCol <- "UTMLatY"                                                      # Y-coordinate column
+zCol <- "UTMDepthZ"                                                      # Z-coordinate column
 
 # Output
 out_file <- "C:/Users/Kevin/Documents/R/output.csv"
@@ -177,7 +178,7 @@ zIncr <- 5.18134715 - 3.454231434                                     # Incremen
 ifNoise <- FALSE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
-if2D <- FALSE                                                         # Controls if the analysis is 2D or 3D
+if2D <- TRUE                                                         # Controls if the analysis is 2D or 3D
 
 ## Analysis Parameters
 percs <- c(50,95)                                                     # Contour percentages
