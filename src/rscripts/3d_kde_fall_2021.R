@@ -43,7 +43,7 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
     dev.off()
   }
   else{
-    imgName <- paste(imgDir, "/", genLabel(m,n,pilot), "lhtml", sep="")
+    imgName <- paste(imgDir, "/", genLabel(m,n,pilot), ".html", sep="")
     plot(fhat, display="rgl", cont=percs, asp=1, col=colorSingle, alpha=opacitySingle)
     scene <- scene3d()
     saveWidget(rglwidget(scene), file=imgName)
@@ -58,12 +58,14 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
 
 # load data
 raw_shark_data <- arc.open("C:/Users/Kevin/Documents/CISC498/MarinelandDemo/Marineland Demo/Marineland_ZooMonitor_3D_MBV_Depths.shp")
-shark_data_df<- arc.select(shark_data)
+shark_data_df<- arc.select(raw_shark_data)
 
 # pre-processing
 shark_data = select(shark_data_df, "UTMx", "UTMy", "DepthM_MBV")
 colnames(shark_data) <- c("X", "Y", "Z")
 shark_data <- na.omit(shark_data)
+
+KDETrialSingle(shark_data, FALSE, c(50, 95), 1, 1, "dscalar", "C:/Users/Kevin/Documents/CISC498/temp", c("red", "black"), c(0.35, 1), "filled.contour")
 
 
 
