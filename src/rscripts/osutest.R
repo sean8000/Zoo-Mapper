@@ -37,3 +37,5 @@ z <- shape$coords.x3
 m <- cbind(x,y,z)
 sm.density(m, panel=TRUE, panel.plot = TRUE)
 
+#writes the shapefile
+writePointsShape(shape, file.choose()) 
