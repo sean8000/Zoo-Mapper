@@ -7,6 +7,10 @@ library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
 
+print("HERE")
+# Add pandoc to path to save widgets
+Sys.setenv(PATH = paste(c(Sys.getenv("PATH"), "C:\\Program Files\\R\\bin\\pandoc"), collapse = ""))
+
 options(stringsAsFactors = FALSE)
 
 # Define Functions
@@ -161,24 +165,25 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 # Set Parameters
 
 ## Data Parameters
-path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 2D Distances.xlsx"        # Path of data
+# path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 2D Distances.xlsx"        # Path of data
 sheet <- 1                                                            # Sheet number (starts at 1) 
-nameCol <- "Focal Name"                                               # Name column
-xCol <- "UTMLongX"                                                     # X-coordinate column
-yCol <- "UTMLatY"                                                      # Y-coordinate column
-zCol <- "UTMDepthZ"                                                      # Z-coordinate column
+# nameCol <- "Focal Name"                                               # Name column
+# xCol <- "UTMLongX"                                                     # X-coordinate column
+# yCol <- "UTMLatY"                                                      # Y-coordinate column
+# zCol <- "UTMDepthZ"                                                      # Z-coordinate column
 
 # Output
 out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
 dir <- "C:/Users/Kevin/Documents/R/KD_Out"                            # Output directory
+# dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
 zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
 ifNoise <- FALSE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
-if2D <- TRUE                                                         # Controls if the analysis is 2D or 3D
+# if2D <- TRUE                                                         # Controls if the analysis is 2D or 3D
 
 ## Analysis Parameters
 percs <- c(50,95)                                                     # Contour percentages
@@ -194,6 +199,18 @@ opacitySingle <- c(0.35, 1)                                           # Opacitie
 opacityDouble1 <- c(0.25, 0.75)                                       # Opacities for first entity of 3D double-entity KDEs
 opacityDouble2 <- c(0.25, 0.75)                                       # Opacities for second entity of 3D double-entity KDEs
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
+
+print("IN 3D_KDE_2021")
+args = commandArgs(trailingOnly=TRUE)
+
+path <- toString(args[1])
+if2D <- (args[2] == "t")
+nameCol <- toString(args[3])
+xCol <- toString(args[4])
+yCol <- toString(args[5])
+zCol <- toString(args[6])
+
+
 
 # Run Program
 run(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded, zIncr, ifNoise, ifSingle, ifDouble, if2D, percs, ms, ns, pilots, colorSingle, colorDouble1, colorDouble2, opacitySingle, opacityDouble1, opacityDouble2, display2D)

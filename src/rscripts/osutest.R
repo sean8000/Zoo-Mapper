@@ -11,7 +11,7 @@ library(sm)
 #https://blogs.oregonstate.edu/geo599spatialstatistics/2014/05/06/working-shapefile-data-r/
 
   
-shape <- readShapePoints("C:/Users/jtayl/Desktop/testr/shapes/shapes.shp")
+shape <- readShapePoints(file.choose())
 #summary(shape)
 #shape <- readOGR("C:/Users/jtayl/Desktop/testr/shapes/shapes.shp")
 #summary(shape)
