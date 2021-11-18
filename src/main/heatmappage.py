@@ -640,7 +640,11 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(HeatMapPage))
         button3.grid(row = 3, column = 0, sticky = N)
 
-        buttons = {button1, button2, button3}
+        button4 = ttk.Button(self, text="Calculate 3D KDE",
+                            command=lambda: print("TEST"))
+        button4.grid(row=4, column=0, sticky=N)
+
+        buttons = {button1, button2, button3, button4}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 
