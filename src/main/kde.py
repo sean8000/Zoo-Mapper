@@ -11,6 +11,7 @@ from tkinter.filedialog import askopenfilename
 import pandas as pd
 import csv
 import subprocess
+import threading
 
 import heatmappage
 
@@ -98,8 +99,8 @@ class KDE_Calculation_Page(tk.Toplevel):
         is_2d_checkbox = tk.Checkbutton(self, text="Check here if data is 2D", variable=self.is_2d)
         is_2d_checkbox.pack()
        
-        tmp_button = tk.Button(self, text="send it",
-                                command=lambda: self.send_it())
+        tmp_button = tk.Button(self, text="Run KDE",
+                                command=lambda: self.run_kde())
         tmp_button.pack()
 
     def get_headers(self, file):
@@ -117,7 +118,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         else:
             return 'f'
 
-    def send_it(self):
+    def run_kde(self):
         # r = robjects.r
         # r['source']('C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R')
 

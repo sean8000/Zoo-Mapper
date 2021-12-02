@@ -7,9 +7,8 @@ library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
 
-print("HERE")
-# Add pandoc to path to save widgets
-Sys.setenv(PATH = paste(c(Sys.getenv("PATH"), "C:\\Program Files\\R\\bin\\pandoc"), collapse = ""))
+# pandoc_path = Sys.getenv("RSTUDIO_PANDOC")
+Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
 
 options(stringsAsFactors = FALSE)
 
@@ -165,39 +164,40 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 # Set Parameters
 
 ## Data Parameters
-# path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 2D Distances.xlsx"        # Path of data
-sheet <- 1                                                            # Sheet number (starts at 1) 
-# nameCol <- "Focal Name"                                               # Name column
-# xCol <- "UTMLongX"                                                     # X-coordinate column
-# yCol <- "UTMLatY"                                                      # Y-coordinate column
-# zCol <- "UTMDepthZ"                                                      # Z-coordinate column
+# path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 3D Distances.xlsx"        # Path of data
+ sheet <- 1                                                            # Sheet number (starts at 1) 
+# nameCol <- "Focal_Shar"                                               # Name column
+# xCol <- "LongUTM"                                                     # X-coordinate column
+# yCol <- "LatUTM"                                                      # Y-coordinate column
+# zCol <- "DepthM"                                                      # Z-coordinate column
 
 # Output
 out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
-dir <- "C:/Users/Kevin/Documents/R/KD_Out"                            # Output directory
+dir <- choose.dir(caption="Choose an output directory")                                                  # Output directory
+# out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
 zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
-ifNoise <- FALSE                                                      # Controls if there is noise added
+ifNoise <- TRUE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
-# if2D <- TRUE                                                         # Controls if the analysis is 2D or 3D
+# if2D <- FALSE                                                         # Controls if the analysis is 2D or 3D
 
 ## Analysis Parameters
-percs <- c(50,95)                                                     # Contour percentages
-ms <- c(1,5)                                                          # Scaling factors for bandwidth
+percs <- c(50, 95, 100)                                                     # Contour percentages
+ms <- c(5)                                                          # Scaling factors for bandwidth
 ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
 pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
 
 ## Display Parameters                                                 # Lengths should match length of percs
 colorSingle <- c("red", "black")                                      # Colors for single-entity KDEs
-colorDouble1 <- c("yellow", "red")                                    # Colors for first entity of 3D double-entity KDEs
+colorDouble1 <- c("yellow", "red")                                     # Colors for first entity of 3D double-entity KDEs
 colorDouble2 <- c("pink", "cyan")                                     # Colors for second entity of 3D double-entity KDEs
 opacitySingle <- c(0.35, 1)                                           # Opacities for 3D single-entity KDEs
-opacityDouble1 <- c(0.25, 0.75)                                       # Opacities for first entity of 3D double-entity KDEs
-opacityDouble2 <- c(0.25, 0.75)                                       # Opacities for second entity of 3D double-entity KDEs
+opacityDouble1 <- c(0.25, 0.50, 0.95)                                       # Opacities for first entity of 3D double-entity KDEs
+opacityDouble2 <- c(0.25, 0.50, 0.95)                                       # Opacities for second entity of 3D double-entity KDEs
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
 
 print("IN 3D_KDE_2021")
@@ -209,6 +209,16 @@ nameCol <- toString(args[3])
 xCol <- toString(args[4])
 yCol <- toString(args[5])
 zCol <- toString(args[6])
+
+#path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
+#sheet <- 4
+#if2D <- FALSE
+#nameCol <- "Focal_Shar"
+#xCol <- "LongUTM"
+#yCol <- "LatUTM"
+#zCol <- "DepthMid"
+
+
 
 
 
