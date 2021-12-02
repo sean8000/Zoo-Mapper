@@ -18,6 +18,7 @@ from heatmap import HeatMapOptionsBox
 from heatmap import InputError
 from heatmappage import HeatMapPage
 from heatmappage import StartPage
+from kde import KDE_Page, KDE_Calculation_Page
 
 import matplotlib.cm as cm
 import matplotlib.image as mpimg
@@ -133,7 +134,7 @@ class ZooMapper(tk.Tk):
         self.selected_sheet = False
         self.submit_selection = False
 
-        for F in (StartPage, PageOne, PageTwo, HeatMapPage):
+        for F in (StartPage, PageOne, PageTwo, HeatMapPage, KDE_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame
