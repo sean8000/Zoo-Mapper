@@ -144,6 +144,21 @@ class KDE_Calculation_Page(tk.Toplevel):
         # r = robjects.r
         # r['source']('C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R')
 
+<<<<<<< HEAD
+=======
+        subprocess.call(['Rscript', './../rscripts/3D_KDE_2021.R',
+                        self.filename, self.bool_to_str(self.is_2d.get()), self.name_col.get(), self.x_col.get(), self.y_col.get(), self.z_col.get()])
+        print("done")
+
+
+
+
+
+
+
+        
+        
+>>>>>>> 72a2318f232eddd601ae0ef9346f48fd9444f043
 
         print(self.m.get())
         subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R',
