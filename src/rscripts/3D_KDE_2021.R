@@ -7,8 +7,10 @@ library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
 
-# pandoc_path = Sys.getenv("RSTUDIO_PANDOC")
+pandoc_path = Sys.getenv("RSTUDIO_PANDOC")
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
+#Sys.setenv(RSTUDIO_PANDOC="./pandoc")
+#Sys.setenv(RSTUDIO_PANDOC=pandoc_path)
 
 options(stringsAsFactors = FALSE)
 
@@ -143,7 +145,8 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
       volumes <- KDESingle(data, if2D, percs, ms, ns, pilots, imgDir, colorSingle, opacitySingle, display2D) # Perform calculations
       print(paste(name,":",sep="")) # Output results
       print(volumes)
-      write.table(volumes, out_file, row.names=TRUE, sep=" ", col.names=TRUE, quote=TRUE, na="NA")
+      out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
+      write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
       }}
   if(nrow(names) > 1 & ifDouble) {
     for(i in 1:(nrow(names)-1)) {
@@ -158,7 +161,8 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
         volumes <- KDEDouble(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D)
         print(paste(tag,":",sep=""))
         print(volumes)
-        write.table(volumes, out_file, row.names=TRUE, sep=" ", col.names=TRUE, quote=TRUE, na="NA")
+        out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
+        write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
         }}}}
 
 # Set Parameters
@@ -172,10 +176,11 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 # zCol <- "DepthM"                                                      # Z-coordinate column
 
 # Output
-out_file <- "C:/Users/Kevin/Documents/R/output.csv"
+#out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
-dir <- choose.dir(caption="Choose an output directory")                                                  # Output directory
+dir <- choose.dir(caption="Choose an output directory")              
+out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
@@ -190,6 +195,7 @@ percs <- c(50, 95, 100)                                                     # Co
 ms <- c(5)                                                          # Scaling factors for bandwidth
 ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
 pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
+# pilots <- c("samse")
 
 ## Display Parameters                                                 # Lengths should match length of percs
 colorSingle <- c("red", "black")                                      # Colors for single-entity KDEs
@@ -209,6 +215,9 @@ nameCol <- toString(args[3])
 xCol <- toString(args[4])
 yCol <- toString(args[5])
 zCol <- toString(args[6])
+ifNoise <= (args[7] == "t")
+ms <- as.integer(args[8])
+
 
 #path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
 #sheet <- 4
@@ -217,10 +226,6 @@ zCol <- toString(args[6])
 #xCol <- "LongUTM"
 #yCol <- "LatUTM"
 #zCol <- "DepthMid"
-
-
-
-
 
 # Run Program
 run(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded, zIncr, ifNoise, ifSingle, ifDouble, if2D, percs, ms, ns, pilots, colorSingle, colorDouble1, colorDouble2, opacitySingle, opacityDouble1, opacityDouble2, display2D)

@@ -642,7 +642,7 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(HeatMapPage))
         button3.grid(row = 3, column = 0, sticky = N)
 
-        button4 = ttk.Button(self, text="3D KDE",
+        button4 = ttk.Button(self, text="KDE",
                             command=lambda: controller.show_frame(KDE_Page))
         button4.grid(row=4, column=0, sticky=N)
 

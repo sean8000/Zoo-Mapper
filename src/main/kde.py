@@ -11,7 +11,7 @@ from tkinter.filedialog import askopenfilename
 import pandas as pd
 import csv
 import subprocess
-import threading
+import multiprocessing
 
 import heatmappage
 
@@ -29,7 +29,9 @@ Allows user to select a file to run KDE calculations on
 class KDE_Page(tk.Frame):
     def __init__(self, parent, controller):
         self.filename = NULL
-
+        self.tmp = tk.StringVar()
+        self.tmp.set("hello")
+        
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Kernel Density Estimate", font=MEDIUM_FONT)
         label.pack(pady=10, padx=10)
@@ -38,13 +40,15 @@ class KDE_Page(tk.Frame):
                                         command=lambda: self.select_file())
         select_button.pack()
 
+        options_button = ttk.Button(self, text="Run KDE",
+                                    command=lambda: self.get_parameters())
+        options_button.pack()
+
         back_button = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(heatmappage.StartPage))
         back_button.pack()
 
-        options_button = ttk.Button(self, text="Set up Parameters",
-                                    command=lambda: self.get_parameters())
-        options_button.pack()
+
 
 
     def select_file(self):
@@ -66,15 +70,20 @@ class KDE_Calculation_Page(tk.Toplevel):
         tk.Toplevel.__init__(self)
         self.attributes('-topmost', 'true')
 
+        self.filename = tk.StringVar()
         self.name_col = tk.StringVar()
         self.x_col = tk.StringVar()
         self.y_col = tk.StringVar()
         self.z_col = tk.StringVar()
         self.is_2d = tk.BooleanVar()
         self.is_2d.set(False)
+        self.noise = tk.BooleanVar()
+        self.noise.set(False)
+        self.m = tk.IntVar()
 
-        self.filename = filename
-        self.headers = self.get_headers(self.filename)
+        self.filename.set(filename)
+
+        self.headers = self.get_headers(self.filename.get())
     
         name_col_label = tk.Label(self, text='Name Column', bg='white')
         name_col_label.pack()
@@ -96,8 +105,16 @@ class KDE_Calculation_Page(tk.Toplevel):
         z_col_dropdown = tk.OptionMenu(self, self.z_col, *self.headers)
         z_col_dropdown.pack()
 
+        m_label = tk.Label(self, text = "Scaling Factor (m)", bg='white')
+        m_label.pack()
+        m_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.m)
+        m_slider.pack()
+
         is_2d_checkbox = tk.Checkbutton(self, text="Check here if data is 2D", variable=self.is_2d)
         is_2d_checkbox.pack()
+
+        noise_checkbox = tk.Checkbutton(self, text='Add noise to data?', variable=self.noise)
+        noise_checkbox.pack()
        
         tmp_button = tk.Button(self, text="Run KDE",
                                 command=lambda: self.run_kde())
@@ -118,22 +135,19 @@ class KDE_Calculation_Page(tk.Toplevel):
         else:
             return 'f'
 
+    def kde_thread_handler(self):
+        kde_thread = multiprocessing.Process(target=self.run_kde)
+        kde_thread.start()
+        kde_thread.join()
+
     def run_kde(self):
         # r = robjects.r
         # r['source']('C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R')
 
-        subprocess.call(['Rscript', 'C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R',
-                        self.filename, self.bool_to_str(self.is_2d.get()), self.name_col.get(), self.x_col.get(), self.y_col.get(), self.z_col.get()])
+
+        print(self.m.get())
+        subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R',
+                        self.filename.get(), self.bool_to_str(self.is_2d.get()), self.name_col.get(), self.x_col.get(), self.y_col.get(), self.z_col.get(), self.bool_to_str(self.noise.get()), str(self.m.get())])
+
         print("done")
-
-
-
-
-
-
-
-        
-        
-
-
 
