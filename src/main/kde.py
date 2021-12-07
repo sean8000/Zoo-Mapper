@@ -12,6 +12,7 @@ import pandas as pd
 import csv
 import subprocess
 import multiprocessing
+import threading
 
 import heatmappage
 
@@ -80,6 +81,21 @@ class KDE_Calculation_Page(tk.Toplevel):
         self.noise = tk.BooleanVar()
         self.noise.set(False)
         self.m = tk.IntVar()
+        self.samse = tk.BooleanVar()
+        self.samse.set(False)
+        self.unconstr = tk.BooleanVar()
+        self.unconstr.set(False)
+        self.dscalar = tk.BooleanVar()
+        self.dscalar.set(False)
+        self.dunconstr = tk.BooleanVar()
+        self.dunconstr.set(False)
+        self.contour_50 = tk.BooleanVar()
+        self.contour_50.set(False)
+        self.contour_95 = tk.BooleanVar()
+        self.contour_95.set(False)
+        self.contour_100 = tk.BooleanVar()
+        self.contour_95.set(False)
+
 
         self.filename.set(filename)
 
@@ -109,6 +125,28 @@ class KDE_Calculation_Page(tk.Toplevel):
         m_label.pack()
         m_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.m)
         m_slider.pack()
+
+        # Select plugins
+        plugins_label = tk.Label(self, text = "Select Plugins", bg = 'white')
+        plugins_label.pack()
+        samse_checkbox = tk.Checkbutton(self, text='samse', variable=self.samse)
+        samse_checkbox.pack()
+        unconstr_checkbox = tk.Checkbutton(self, text='unconstr', variable=self.unconstr)
+        unconstr_checkbox.pack()
+        dscalar_checkbox = tk.Checkbutton(self, text='dscalar', variable=self.dscalar)
+        dscalar_checkbox.pack()
+        dunconstr_checkbox = tk.Checkbutton(self, text='dunconstr', variable=self.dunconstr)
+        dunconstr_checkbox.pack()
+
+        # Select contours
+        contours_label = tk.Label(self, text = "Select Contours", bg='white')
+        contours_label.pack()
+        c50_checkbox = tk.Checkbutton(self, text='50%', variable=self.contour_50)
+        c50_checkbox.pack()
+        c95_checkbox = tk.Checkbutton(self, text='95%', variable=self.contour_95)
+        c95_checkbox.pack()
+        c100_checkbox = tk.Checkbutton(self, text='100%', variable=self.contour_100)
+        c100_checkbox.pack()
 
         is_2d_checkbox = tk.Checkbutton(self, text="Check here if data is 2D", variable=self.is_2d)
         is_2d_checkbox.pack()
@@ -147,7 +185,20 @@ class KDE_Calculation_Page(tk.Toplevel):
 
         print(self.m.get())
         subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R',
-                        self.filename.get(), self.bool_to_str(self.is_2d.get()), self.name_col.get(), self.x_col.get(), self.y_col.get(), self.z_col.get(), self.bool_to_str(self.noise.get()), str(self.m.get())])
+                        self.filename.get(), self.bool_to_str(self.is_2d.get()), 
+                                                                self.name_col.get(),
+                                                                self.x_col.get(),
+                                                                self.y_col.get(),
+                                                                self.z_col.get(),
+                                                                self.bool_to_str(self.noise.get()),
+                                                                str(self.m.get()),
+                                                                self.bool_to_str(self.contour_50.get()),
+                                                                self.bool_to_str(self.contour_95.get()),
+                                                                self.bool_to_str(self.contour_100.get()),
+                                                                self.bool_to_str(self.samse.get()),
+                                                                self.bool_to_str(self.unconstr.get()),
+                                                                self.bool_to_str(self.dscalar.get()),
+                                                                self.bool_to_str(self.dunconstr.get()),])
 
         print("done")
 

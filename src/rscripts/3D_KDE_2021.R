@@ -7,7 +7,9 @@ library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
 
-pandoc_path = Sys.getenv("RSTUDIO_PANDOC")
+pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
+print("PANDOC PATH BELOW")
+print(pandoc_path)
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
 #Sys.setenv(RSTUDIO_PANDOC="./pandoc")
 #Sys.setenv(RSTUDIO_PANDOC=pandoc_path)
@@ -191,10 +193,10 @@ ifDouble <- TRUE                                                      # Controls
 # if2D <- FALSE                                                         # Controls if the analysis is 2D or 3D
 
 ## Analysis Parameters
-percs <- c(50, 95, 100)                                                     # Contour percentages
+#percs <- c(50, 95, 100)                                                     # Contour percentages
 ms <- c(5)                                                          # Scaling factors for bandwidth
 ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
-pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
+#pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
 # pilots <- c("samse")
 
 ## Display Parameters                                                 # Lengths should match length of percs
@@ -217,6 +219,40 @@ yCol <- toString(args[5])
 zCol <- toString(args[6])
 ifNoise <= (args[7] == "t")
 ms <- as.integer(args[8])
+contour_50 <- (args[9]=="t")
+contour_95 <- (args[10]=="t")
+contour_100 <- (args[11]=="t")
+samse <- (args[12]=="t")
+unconstr <- (args[13]=="t")
+dscalar <- (args[14]=="t")
+dunconstr <- (args[15]=="t")
+
+pilots <- c()
+if(samse){
+  pilots <- c(pilots, "samse")
+}
+if(unconstr){
+  pilots <- c(pilots, "unconstr")
+}
+if(dscalar){
+  pilots <- c(pilots, "dscalar")
+}
+if(dunconstr){
+  pilots <- c(pilots, "dunconstr")
+}
+print(pilots)
+
+percs <- c()
+if(contour_50){
+  percs <- c(percs, 50)
+}
+if(contour_95){
+  percs <- c(percs, 95)
+}
+if(contour_100){
+  percs <- c(percs, 100)
+}
+print(percs)
 
 
 #path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
