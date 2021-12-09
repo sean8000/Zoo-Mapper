@@ -355,7 +355,7 @@ class ZooMapper(tk.Tk):
 
     def print_dev(self):
         messagebox.showinfo("Developers",
-                            "Farah Aljishi\nTyler Ballance\nDerek Baum\nRyan Bonacquisti\nNishant Chintala\nCharlie Hannum\nSamuel Herring\nDebra Lymon\nNtsee Ndingwan\nBobby Stahl\nJake Wise\nMichael Yacucci")
+                            "Farah Aljishi\nTyler Ballance\nDerek Baum\nRyan Bonacquisti\nKevin Bookwalter\nNishant Chintala\nCharlie Hannum\nSamuel Herring\nDebra Lymon\nNtsee Ndingwan\nBobby Stahl\nJake Wise\nMichael Yacucci")
 
     def show_frame(self, cont):
         """

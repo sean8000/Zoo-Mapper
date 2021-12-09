@@ -194,8 +194,8 @@ ifDouble <- TRUE                                                      # Controls
 
 ## Analysis Parameters
 #percs <- c(50, 95, 100)                                                     # Contour percentages
-ms <- c(5)                                                          # Scaling factors for bandwidth
-ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
+#ms <- c(5)                                                          # Scaling factors for bandwidth
+#ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
 #pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
 # pilots <- c("samse")
 
@@ -219,13 +219,14 @@ yCol <- toString(args[5])
 zCol <- toString(args[6])
 ifNoise <= (args[7] == "t")
 ms <- as.integer(args[8])
-contour_50 <- (args[9]=="t")
-contour_95 <- (args[10]=="t")
-contour_100 <- (args[11]=="t")
-samse <- (args[12]=="t")
-unconstr <- (args[13]=="t")
-dscalar <- (args[14]=="t")
-dunconstr <- (args[15]=="t")
+ns <- as.integer(args[9])
+contour_50 <- (args[10]=="t")
+contour_95 <- (args[11]=="t")
+contour_100 <- (args[12]=="t")
+samse <- (args[13]=="t")
+unconstr <- (args[14]=="t")
+dscalar <- (args[15]=="t")
+dunconstr <- (args[16]=="t")
 
 pilots <- c()
 if(samse){

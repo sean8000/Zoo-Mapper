@@ -81,6 +81,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         self.noise = tk.BooleanVar()
         self.noise.set(False)
         self.m = tk.IntVar()
+        self.n = tk.IntVar()
         self.samse = tk.BooleanVar()
         self.samse.set(False)
         self.unconstr = tk.BooleanVar()
@@ -125,6 +126,11 @@ class KDE_Calculation_Page(tk.Toplevel):
         m_label.pack()
         m_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.m)
         m_slider.pack()
+
+        n_label = tk.Label(self, text = "Stages in bandwith optimization (n)", bg='white')
+        n_label.pack()
+        n_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.n)
+        n_slider.pack()
 
         # Select plugins
         plugins_label = tk.Label(self, text = "Select Plugins", bg = 'white')
@@ -192,6 +198,7 @@ class KDE_Calculation_Page(tk.Toplevel):
                                                                 self.z_col.get(),
                                                                 self.bool_to_str(self.noise.get()),
                                                                 str(self.m.get()),
+                                                                str(self.n.get()),
                                                                 self.bool_to_str(self.contour_50.get()),
                                                                 self.bool_to_str(self.contour_95.get()),
                                                                 self.bool_to_str(self.contour_100.get()),
