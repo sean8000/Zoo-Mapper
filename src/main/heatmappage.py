@@ -36,6 +36,8 @@ import shlex
 from tksheet import Sheet
 import csv
 
+from kde import KDE_Page
+
 LARGE_FONT = ("Bell Gothic Std Black", 40, 'bold')
 MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
 BUTTON_FONT = ('Calibiri', 14, 'bold')
@@ -640,7 +642,11 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(HeatMapPage))
         button3.grid(row = 3, column = 0, sticky = N)
 
-        buttons = {button1, button2, button3}
+        button4 = ttk.Button(self, text="KDE",
+                            command=lambda: controller.show_frame(KDE_Page))
+        button4.grid(row=4, column=0, sticky=N)
+
+        buttons = {button1, button2, button3, button4}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 
@@ -705,4 +711,3 @@ class StartPage(tk.Frame):
             bg = canvas.create_image(0, 0, anchor=tk.NW, image=image)
 
         parent.bind('<Configure>', changeScale)
-
