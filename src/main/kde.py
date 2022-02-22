@@ -54,7 +54,17 @@ class KDE_Page(tk.Frame):
 
     def select_file(self):
        # Tk.withdraw(self)
-        self.filename = askopenfilename()
+        validFile = False
+
+        
+        self.filename = askopenfilename(initialdir="", title="Select a File", filetypes=(("Excel Files", "*.xlsx*"), ("CSV Files", "*.csv*"), ("All Files", "*.*")))
+        file_type = filename[filename.index('.'):]
+        if file_type == ".xlsx":
+            validFile = True
+        else:
+            errorMessage(Error.FILETYPE)
+            self.filename = ""
+
 
     def get_parameters(self):
         options_box = KDE_Calculation_Page(self.filename)
