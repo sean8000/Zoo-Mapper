@@ -8,6 +8,7 @@ import rpy2.robjects as robjects
 from rpy2.robjects import NULL, pandas2ri
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+from tkinter import messagebox
 import pandas as pd
 import csv
 import subprocess
@@ -58,7 +59,7 @@ class KDE_Page(tk.Frame):
 
         
         self.filename = askopenfilename(initialdir="", title="Select a File", filetypes=(("Excel Files", "*.xlsx*"), ("CSV Files", "*.csv*"), ("All Files", "*.*")))
-        file_type = filename[filename.index('.'):]
+        file_type = self.filename[self.filename.index('.'):]
         if file_type == ".xlsx":
             validFile = True
         else:
@@ -217,5 +218,5 @@ class KDE_Calculation_Page(tk.Toplevel):
                                                                 self.bool_to_str(self.dscalar.get()),
                                                                 self.bool_to_str(self.dunconstr.get()),])
 
-        print("done")
+        messagebox.showinfo("Complete", "KDE calculations are complete")
 
