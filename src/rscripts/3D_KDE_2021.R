@@ -186,7 +186,7 @@ out_file <- paste(dir, "output.csv", sep="\\")                                  
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
-zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
+#zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
 ifNoise <- TRUE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
@@ -228,6 +228,12 @@ unconstr <- (args[14]=="t")
 dscalar <- (args[15]=="t")
 dunconstr <- (args[16]=="t")
 
+
+
+zIncr <- max(read_excel(path)[zCol]) - min(read_excel(path)[zCol])
+print("Z Range")
+print(zIncr)
+
 pilots <- c()
 if(samse){
   pilots <- c(pilots, "samse")
@@ -241,7 +247,7 @@ if(dscalar){
 if(dunconstr){
   pilots <- c(pilots, "dunconstr")
 }
-print(pilots)
+
 
 percs <- c()
 if(contour_50){
@@ -253,7 +259,7 @@ if(contour_95){
 if(contour_100){
   percs <- c(percs, 100)
 }
-print(percs)
+
 
 
 #path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
