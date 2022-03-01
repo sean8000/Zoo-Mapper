@@ -2,6 +2,7 @@ from tkinter.ttk import Style
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
+from tkinter import filedialog
 from numpy import true_divide
 import pandas as pd
 import rpy2.robjects as robjects
@@ -31,6 +32,7 @@ Allows user to select a file to run KDE calculations on
 class KDE_Page(tk.Frame):
     def __init__(self, parent, controller):
         self.filename = NULL
+        self.outputname = NULL
         self.tmp = tk.StringVar()
         self.tmp.set("hello")
         
@@ -49,7 +51,6 @@ class KDE_Page(tk.Frame):
         back_button = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(heatmappage.StartPage))
         back_button.pack()
-
 
 
 
@@ -83,6 +84,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         self.attributes('-topmost', 'true')
 
         self.filename = tk.StringVar()
+        self.outputname = tk.StringVar()
         self.name_col = tk.StringVar()
         self.x_col = tk.StringVar()
         self.y_col = tk.StringVar()
@@ -195,10 +197,20 @@ class KDE_Calculation_Page(tk.Toplevel):
         kde_thread.start()
         kde_thread.join()
 
+    '''
+    Selecting an output directory for the KDE calculations through python before the R script
+    '''
+    def select_output(self):
+        validFile = False
+        self.outputname = filedialog.askdirectory(title = "Select a Directory for Output")
+
     def run_kde(self):
         # r = robjects.r
         # r['source']('C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R')
 
+        #run output file selection before KDE R Script
+        self.select_output()
+        print(self.outputname)
 
         print(self.m.get())
         subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R',
@@ -216,7 +228,8 @@ class KDE_Calculation_Page(tk.Toplevel):
                                                                 self.bool_to_str(self.samse.get()),
                                                                 self.bool_to_str(self.unconstr.get()),
                                                                 self.bool_to_str(self.dscalar.get()),
-                                                                self.bool_to_str(self.dunconstr.get()),])
+                                                                self.bool_to_str(self.dunconstr.get()),
+                                                                self.outputname])
 
         messagebox.showinfo("Complete", "KDE calculations are complete")
 

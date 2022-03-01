@@ -181,7 +181,10 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 #out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
-dir <- choose.dir(caption="Choose an output directory")              
+#dir <- choose.dir(caption="Choose an output directory")  
+# OUTPUT NOW COMES FROM PYTHON CALL
+args = commandArgs(trailingOnly=TRUE)            
+dir <- toString(args[17])
 out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
@@ -209,7 +212,9 @@ opacityDouble2 <- c(0.25, 0.50, 0.95)                                       # Op
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
 
 print("IN 3D_KDE_2021")
-args = commandArgs(trailingOnly=TRUE)
+
+#moved args assignment to assignment or DIR for the python menu implementation
+#args = commandArgs(trailingOnly=TRUE)
 
 path <- toString(args[1])
 if2D <- (args[2] == "t")
