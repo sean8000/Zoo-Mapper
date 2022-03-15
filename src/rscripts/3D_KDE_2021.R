@@ -184,7 +184,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 #dir <- choose.dir(caption="Choose an output directory")  
 # OUTPUT NOW COMES FROM PYTHON CALL
 args = commandArgs(trailingOnly=TRUE)            
-dir <- toString(args[17])
+dir <- toString(args[14])
 out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
@@ -216,6 +216,7 @@ print("IN 3D_KDE_2021")
 #moved args assignment to assignment or DIR for the python menu implementation
 #args = commandArgs(trailingOnly=TRUE)
 
+# Set static args
 path <- toString(args[1])
 if2D <- (args[2] == "t")
 nameCol <- toString(args[3])
@@ -225,14 +226,24 @@ zCol <- toString(args[6])
 ifNoise <= (args[7] == "t")
 ms <- as.integer(args[8])
 ns <- as.integer(args[9])
-contour_50 <- (args[10]=="t")
-contour_95 <- (args[11]=="t")
-contour_100 <- (args[12]=="t")
-samse <- (args[13]=="t")
-unconstr <- (args[14]=="t")
-dscalar <- (args[15]=="t")
-dunconstr <- (args[16]=="t")
+samse <- (args[10]=="t")
+unconstr <- (args[11]=="t")
+dscalar <- (args[12]=="t")
+dunconstr <- (args[13]=="t")
+# dir <- toString(args[14])
 
+# Set contours (parcs)
+percs <- c()
+arg_index <- 15
+
+while (arg_index <= length(args)){
+  print(args[arg_index])
+  percs <- c(percs, as.integer(args[arg_index]))
+  arg_index <- arg_index + 1
+}
+
+print("CONTOURS:")
+print(percs)
 
 
 zIncr <- max(read_excel(path)[zCol]) - min(read_excel(path)[zCol])
@@ -254,16 +265,16 @@ if(dunconstr){
 }
 
 
-percs <- c()
-if(contour_50){
-  percs <- c(percs, 50)
-}
-if(contour_95){
-  percs <- c(percs, 95)
-}
-if(contour_100){
-  percs <- c(percs, 100)
-}
+# percs <- c()
+# if(contour_50){
+#   percs <- c(percs, 50)
+# }
+# if(contour_95){
+#   percs <- c(percs, 95)
+# }
+# if(contour_100){
+#   percs <- c(percs, 100)
+# }
 
 
 

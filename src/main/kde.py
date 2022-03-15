@@ -15,6 +15,7 @@ import csv
 import subprocess
 import multiprocessing
 import threading
+import re
 
 import heatmappage
 
@@ -63,7 +64,7 @@ class KDE_Page(tk.Frame):
         file_type = self.filename[self.filename.index('.'):]
         if file_type == ".xlsx":
             validFile = True
-	if file_type == ".csv":
+        if file_type == ".csv":
             validFile = True
         else:
             errorMessage(Error.FILETYPE)
@@ -159,15 +160,25 @@ class KDE_Calculation_Page(tk.Toplevel):
         dunconstr_checkbox = tk.Checkbutton(self, text='dunconstr', variable=self.dunconstr)
         dunconstr_checkbox.pack()
 
-        # Select contours
-        contours_label = tk.Label(self, text = "Select Contours", bg='white')
+        ## Edited by Kevin on 03/12/22 to change checkboxes to text input for contour setup
+
+        # # Select contours
+
+        contours_label = tk.Label(self, text = "Input Contours", bg='white')
         contours_label.pack()
-        c50_checkbox = tk.Checkbutton(self, text='50%', variable=self.contour_50)
-        c50_checkbox.pack()
-        c95_checkbox = tk.Checkbutton(self, text='95%', variable=self.contour_95)
-        c95_checkbox.pack()
-        c100_checkbox = tk.Checkbutton(self, text='100%', variable=self.contour_100)
-        c100_checkbox.pack()
+        self.contours_textbox = tk.Text(self, height=1, width=20)
+        self.contours_textbox.pack()
+        
+
+        
+        # c50_checkbox = tk.Checkbutton(self, text='50%', variable=self.contour_50)
+        # c50_checkbox.pack()
+        # c95_checkbox = tk.Checkbutton(self, text='95%', variable=self.contour_95)
+        # c95_checkbox.pack()
+        # c100_checkbox = tk.Checkbutton(self, text='100%', variable=self.contour_100)
+        # c100_checkbox.pack()
+
+        ## End edit
 
         is_2d_checkbox = tk.Checkbutton(self, text="Check here if data is 2D", variable=self.is_2d)
         is_2d_checkbox.pack()
@@ -206,32 +217,47 @@ class KDE_Calculation_Page(tk.Toplevel):
         validFile = False
         self.outputname = filedialog.askdirectory(title = "Select a Directory for Output")
 
+    def get_contours(self):
+        contours = self.contours_textbox.get(1.0, "end")
+        contours = re.sub(","," ", contours)
+        contours = re.sub("\s+", " ", contours)
+        contours = re.sub("\s+\Z", "", contours)
+        contours = re.split("\s", contours)
+
+        return contours
+
     def run_kde(self):
-        # r = robjects.r
-        # r['source']('C:/Users/Kevin/Documents/GitHub/Zoo-Mapper/src/rscripts/3D_KDE_2021.R')
-
-        #run output file selection before KDE R Script
+        # Select output file
         self.select_output()
-        print(self.outputname)
+        
+        # get contours
+        cs = self.get_contours()
+        
+        # Set arguments
+        r_args = ['Rscript',
+                    'src/rscripts/3D_KDE_2021.R',
+                    self.filename.get(),                        # arg 1
+                    self.bool_to_str(self.is_2d.get()),         # arg 2
+                    self.name_col.get(),                        # arg 3
+                    self.x_col.get(),                           # arg 4
+                    self.y_col.get(),                           # arg 5
+                    self.z_col.get(),                           # arg 6
+                    self.bool_to_str(self.noise.get()),         # arg 7
+                    str(self.m.get()),                          # arg 8
+                    str(self.n.get()),                          # arg 9
+                    self.bool_to_str(self.samse.get()),         # arg 10
+                    self.bool_to_str(self.unconstr.get()),      # arg 11
+                    self.bool_to_str(self.dscalar.get()),       # arg 12
+                    self.bool_to_str(self.dunconstr.get()),     # arg 13
+                    self.outputname                             # arg 14
+                ]
 
-        print(self.m.get())
-        subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R',
-                        self.filename.get(), self.bool_to_str(self.is_2d.get()), 
-                                                                self.name_col.get(),
-                                                                self.x_col.get(),
-                                                                self.y_col.get(),
-                                                                self.z_col.get(),
-                                                                self.bool_to_str(self.noise.get()),
-                                                                str(self.m.get()),
-                                                                str(self.n.get()),
-                                                                self.bool_to_str(self.contour_50.get()),
-                                                                self.bool_to_str(self.contour_95.get()),
-                                                                self.bool_to_str(self.contour_100.get()),
-                                                                self.bool_to_str(self.samse.get()),
-                                                                self.bool_to_str(self.unconstr.get()),
-                                                                self.bool_to_str(self.dscalar.get()),
-                                                                self.bool_to_str(self.dunconstr.get()),
-                                                                self.outputname])
+        # Add contours to args
+        r_args = r_args + cs                                    # arg 15 and on
 
+        # Call R process
+        subprocess.call(r_args)
+
+        # Alert user that calculations are done
         messagebox.showinfo("Complete", "KDE calculations are complete")
 
