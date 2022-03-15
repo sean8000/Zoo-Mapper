@@ -181,12 +181,15 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 #out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
-dir <- choose.dir(caption="Choose an output directory")              
+#dir <- choose.dir(caption="Choose an output directory")  
+# OUTPUT NOW COMES FROM PYTHON CALL
+args = commandArgs(trailingOnly=TRUE)            
+dir <- toString(args[17])
 out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
-zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
+#zIncr <- 5.18134715 - 3.454231434                                     # Increment in Z for adding noise
 ifNoise <- TRUE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
@@ -209,7 +212,9 @@ opacityDouble2 <- c(0.25, 0.50, 0.95)                                       # Op
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
 
 print("IN 3D_KDE_2021")
-args = commandArgs(trailingOnly=TRUE)
+
+#moved args assignment to assignment or DIR for the python menu implementation
+#args = commandArgs(trailingOnly=TRUE)
 
 path <- toString(args[1])
 if2D <- (args[2] == "t")
@@ -228,6 +233,12 @@ unconstr <- (args[14]=="t")
 dscalar <- (args[15]=="t")
 dunconstr <- (args[16]=="t")
 
+
+
+zIncr <- max(read_excel(path)[zCol]) - min(read_excel(path)[zCol])
+print("Z Range")
+print(zIncr)
+
 pilots <- c()
 if(samse){
   pilots <- c(pilots, "samse")
@@ -241,7 +252,7 @@ if(dscalar){
 if(dunconstr){
   pilots <- c(pilots, "dunconstr")
 }
-print(pilots)
+
 
 percs <- c()
 if(contour_50){
@@ -253,7 +264,7 @@ if(contour_95){
 if(contour_100){
   percs <- c(percs, 100)
 }
-print(percs)
+
 
 
 #path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
