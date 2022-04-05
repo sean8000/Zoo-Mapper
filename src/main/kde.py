@@ -3,7 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
-from numpy import true_divide
+from tokenize import Double
+from numpy import double, true_divide
 import pandas as pd
 import rpy2.robjects as robjects
 from rpy2.robjects import NULL, pandas2ri
@@ -66,9 +67,9 @@ class KDE_Page(tk.Frame):
             validFile = True
         if file_type == ".csv":
             validFile = True
-        else:
-            errorMessage(Error.FILETYPE)
-            self.filename = ""
+        # else:
+        #     errorMessage(Error.FILETYPE)
+        #     self.filename = ""
 
 
     def get_parameters(self):
@@ -106,12 +107,10 @@ class KDE_Calculation_Page(tk.Toplevel):
         self.dscalar.set(False)
         self.dunconstr = tk.BooleanVar()
         self.dunconstr.set(False)
-        self.contour_50 = tk.BooleanVar()
-        self.contour_50.set(False)
-        self.contour_95 = tk.BooleanVar()
-        self.contour_95.set(False)
-        self.contour_100 = tk.BooleanVar()
-        self.contour_95.set(False)
+        self.enclosure_depth = tk.StringVar()
+        self.enclosure_depth.set('1.0')
+        self.depth_sections = tk.StringVar()
+        self.depth_sections.set('1.0')
 
 
         self.filename.set(filename)
@@ -160,31 +159,27 @@ class KDE_Calculation_Page(tk.Toplevel):
         dunconstr_checkbox = tk.Checkbutton(self, text='dunconstr', variable=self.dunconstr)
         dunconstr_checkbox.pack()
 
-        ## Edited by Kevin on 03/12/22 to change checkboxes to text input for contour setup
-
         # # Select contours
-
         contours_label = tk.Label(self, text = "Input Contours", bg='white')
         contours_label.pack()
         self.contours_textbox = tk.Text(self, height=1, width=20)
         self.contours_textbox.pack()
         
-
-        
-        # c50_checkbox = tk.Checkbutton(self, text='50%', variable=self.contour_50)
-        # c50_checkbox.pack()
-        # c95_checkbox = tk.Checkbutton(self, text='95%', variable=self.contour_95)
-        # c95_checkbox.pack()
-        # c100_checkbox = tk.Checkbutton(self, text='100%', variable=self.contour_100)
-        # c100_checkbox.pack()
-
-        ## End edit
-
         is_2d_checkbox = tk.Checkbutton(self, text="Check here if data is 2D", variable=self.is_2d)
         is_2d_checkbox.pack()
 
         noise_checkbox = tk.Checkbutton(self, text='Add noise to data?', variable=self.noise)
         noise_checkbox.pack()
+
+        depth_sections_label = tk.Label(self, text = "Number of Depth Sections", bg='white')
+        depth_sections_label.pack()
+        self.depth_sections_textbox = tk.Text(self, height=1, width=20)
+        self.depth_sections_textbox.pack()
+
+        depth_label = tk.Label(self, text="Enclosure Depth", bg='white')
+        depth_label.pack()
+        self.depth_textbox = tk.Text(self, height=1, width=20)
+        self.depth_textbox.pack()
        
         tmp_button = tk.Button(self, text="Run KDE",
                                 command=lambda: self.run_kde())
@@ -226,6 +221,12 @@ class KDE_Calculation_Page(tk.Toplevel):
 
         return contours
 
+    def set_enclosure_depth(self):
+        self.enclosure_depth.set(self.depth_textbox.get(1.0, "end"))
+    
+    def set_depth_sections(self):
+        self.depth_sections.set(self.depth_sections_textbox.get(1.0, "end"))
+
     def run_kde(self):
         # Select output file
         self.select_output()
@@ -233,6 +234,10 @@ class KDE_Calculation_Page(tk.Toplevel):
         # get contours
         cs = self.get_contours()
         
+        if(self.noise.get()):
+            self.set_enclosure_depth()
+            self.set_depth_sections()
+
         # Set arguments
         r_args = ['Rscript',
                     'src/rscripts/3D_KDE_2021.R',
@@ -249,11 +254,13 @@ class KDE_Calculation_Page(tk.Toplevel):
                     self.bool_to_str(self.unconstr.get()),      # arg 11
                     self.bool_to_str(self.dscalar.get()),       # arg 12
                     self.bool_to_str(self.dunconstr.get()),     # arg 13
-                    self.outputname                             # arg 14
+                    self.outputname,                            # arg 14
+                    self.enclosure_depth.get(),                 # arg 15
+                    self.depth_sections.get()                   # arg 16
                 ]
 
         # Add contours to args
-        r_args = r_args + cs                                    # arg 15 and on
+        r_args = r_args + cs                                    # arg 17 and on
 
         # Call R process
         subprocess.call(r_args)

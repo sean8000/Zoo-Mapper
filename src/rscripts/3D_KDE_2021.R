@@ -128,6 +128,7 @@ prepData <- function(raw, name, nameCol, xCol, yCol, zCol, zIncr, ifNoise, if2D)
     data <- select(data, xCol, yCol, zCol) # Select coordinate columns as X,Y,Z
     colnames(data) <- c("X", "Y", "Z") } # Rename columns to X,Y,Z
   data <- na.omit(data) # Remove rows with missing data
+  # Adding noise here. runif(n, min, max) produces a uniform sample of size n between the values of min and max
   if(ifNoise & !if2D) { data[,3] <- data[,3] + runif(nrow(data), -zIncr, 0) } # Add noise to Z
   return(data) }
 
@@ -230,11 +231,10 @@ samse <- (args[10]=="t")
 unconstr <- (args[11]=="t")
 dscalar <- (args[12]=="t")
 dunconstr <- (args[13]=="t")
-# dir <- toString(args[14])
 
 # Set contours (parcs)
 percs <- c()
-arg_index <- 15
+arg_index <- 17
 
 while (arg_index <= length(args)){
   print(args[arg_index])
@@ -245,8 +245,15 @@ while (arg_index <= length(args)){
 print("CONTOURS:")
 print(percs)
 
+# Determining depth section height
+# Currently, heights are marked as the top of a section, so the range between the max and min
+# depth values goes from the top of the highest section to the top of the lowest section.
+# The range of the bottom section is not included, so we subtract 1 from section count
+# when finding heights of individual sections below
+enclosure_depth <- as.double(args[15])
+depth_sections <- as.double(args[16])
+zIncr <- enclosure_depth / depth_sections
 
-zIncr <- max(read_excel(path)[zCol]) - min(read_excel(path)[zCol])
 print("Z Range")
 print(zIncr)
 
