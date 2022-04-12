@@ -17,6 +17,7 @@ import subprocess
 import multiprocessing
 import threading
 import re
+import json
 
 import heatmappage
 
@@ -25,6 +26,7 @@ MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
 BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
+JSON_PATH = 'resources/kde_args.json'
 
 
 """
@@ -227,44 +229,73 @@ class KDE_Calculation_Page(tk.Toplevel):
     def set_depth_sections(self):
         self.depth_sections.set(self.depth_sections_textbox.get(1.0, "end"))
 
+    # TODO: add contours and output path do dict
+    def get_kde_args_dict(self) -> dict:
+        kde_args = {}
+
+        kde_args['filename'] = self.filename.get()
+        kde_args['is2d'] = self.is_2d.get()
+        kde_args['name_col'] = self.name_col.get()
+        kde_args['x_col'] = self.x_col.get()
+        kde_args['y_col'] = self.y_col.get()
+        kde_args['z_col'] = self.z_col.get()
+        kde_args['noise'] = self.noise.get()
+        kde_args['m'] = self.m.get()
+        kde_args['n'] = self.n.get()
+        kde_args['samse'] = self.samse.get()
+        kde_args['unconstr'] = self.unconstr.get()
+        kde_args['dscalar'] = self.dscalar.get()
+        kde_args['dunconstr'] = self.dunconstr.get()
+        kde_args['enclosure_depth'] = self.enclosure_depth.get()
+        kde_args['depth_sections'] = self.depth_sections.get()
+
+
+        return kde_args
+
     def run_kde(self):
-        # Select output file
-        self.select_output()
+
+        kde_args = self.get_kde_args_dict()
+        with open(JSON_PATH, "w") as outfile:
+            json.dump(kde_args, outfile)
+
+
+        # # Select output file
+        # self.select_output()
         
-        # get contours
-        cs = self.get_contours()
+        # # get contours
+        # cs = self.get_contours()
         
-        if(self.noise.get()):
-            self.set_enclosure_depth()
-            self.set_depth_sections()
+        # if(self.noise.get()):
+        #     self.set_enclosure_depth()
+        #     self.set_depth_sections()
 
-        # Set arguments
-        r_args = ['Rscript',
-                    'src/rscripts/3D_KDE_2021.R',
-                    self.filename.get(),                        # arg 1
-                    self.bool_to_str(self.is_2d.get()),         # arg 2
-                    self.name_col.get(),                        # arg 3
-                    self.x_col.get(),                           # arg 4
-                    self.y_col.get(),                           # arg 5
-                    self.z_col.get(),                           # arg 6
-                    self.bool_to_str(self.noise.get()),         # arg 7
-                    str(self.m.get()),                          # arg 8
-                    str(self.n.get()),                          # arg 9
-                    self.bool_to_str(self.samse.get()),         # arg 10
-                    self.bool_to_str(self.unconstr.get()),      # arg 11
-                    self.bool_to_str(self.dscalar.get()),       # arg 12
-                    self.bool_to_str(self.dunconstr.get()),     # arg 13
-                    self.outputname,                            # arg 14
-                    self.enclosure_depth.get(),                 # arg 15
-                    self.depth_sections.get()                   # arg 16
-                ]
+        # # Set arguments
+        # r_args = ['Rscript',
+        #             'src/rscripts/3D_KDE_2021.R',
+        #             self.filename.get(),                        # arg 1
+        #             self.bool_to_str(self.is_2d.get()),         # arg 2
+        #             self.name_col.get(),                        # arg 3
+        #             self.x_col.get(),                           # arg 4
+        #             self.y_col.get(),                           # arg 5
+        #             self.z_col.get(),                           # arg 6
+        #             self.bool_to_str(self.noise.get()),         # arg 7
+        #             str(self.m.get()),                          # arg 8
+        #             str(self.n.get()),                          # arg 9
+        #             self.bool_to_str(self.samse.get()),         # arg 10
+        #             self.bool_to_str(self.unconstr.get()),      # arg 11
+        #             self.bool_to_str(self.dscalar.get()),       # arg 12
+        #             self.bool_to_str(self.dunconstr.get()),     # arg 13
+        #             self.outputname,                            # arg 14
+        #             self.enclosure_depth.get(),                 # arg 15
+        #             self.depth_sections.get()                   # arg 16
+        #         ]
 
-        # Add contours to args
-        r_args = r_args + cs                                    # arg 17 and on
+        # # Add contours to args
+        # r_args = r_args + cs                                    # arg 17 and on
 
-        # Call R process
-        subprocess.call(r_args)
+        # # Call R process
+        # subprocess.call(r_args)
 
-        # Alert user that calculations are done
-        messagebox.showinfo("Complete", "KDE calculations are complete")
+        # # Alert user that calculations are done
+        # messagebox.showinfo("Complete", "KDE calculations are complete")
 

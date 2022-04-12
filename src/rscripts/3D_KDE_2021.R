@@ -6,6 +6,7 @@ library (readxl)
 library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
+library(rjson)
 
 pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
 print("PANDOC PATH BELOW")
