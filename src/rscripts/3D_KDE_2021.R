@@ -252,27 +252,5 @@ if(dunconstr){
   pilots <- c(pilots, "dunconstr")
 }
 
-
-# percs <- c()
-# if(contour_50){
-#   percs <- c(percs, 50)
-# }
-# if(contour_95){
-#   percs <- c(percs, 95)
-# }
-# if(contour_100){
-#   percs <- c(percs, 100)
-# }
-
-
-
-#path <- ("C:/Users/Kevin/Documents/CISC498/Sample Test Calculations/Mid depth vs top depth 2D and 3D test calculations.xlsx")
-#sheet <- 4
-#if2D <- FALSE
-#nameCol <- "Focal_Shar"
-#xCol <- "LongUTM"
-#yCol <- "LatUTM"
-#zCol <- "DepthMid"
-
 # Run Program
 run(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded, zIncr, ifNoise, ifSingle, ifDouble, if2D, percs, ms, ns, pilots, colorSingle, colorDouble1, colorDouble2, opacitySingle, opacityDouble1, opacityDouble2, display2D)
