@@ -52,6 +52,7 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
   if(if2D) { # Create and save 2D plot
     imgName <- paste(imgDir,"/",genLabel(m,n,pilot),".png",sep="")
     png(imgName)
+    print(paste("imgName", imgName, sep=" "))
     plot(fhat, display=display2D, cont=percs, asp=1, col=colorSingle)
     dev.off()
   }
@@ -146,7 +147,6 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
       print(paste(name,":",sep="")) # Output results
       print(volumes)
       out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
-      print(out_file_name)
       write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
       }}
   if(nrow(names) > 1 & ifDouble) {
@@ -162,8 +162,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
         volumes <- KDEDouble(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D)
         print(paste(tag,":",sep=""))
         print(volumes)
-        out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
-        print(out_file_name)
+        out_file_name = paste(dir, (paste(name1, name2, "output.csv", sep="-")), sep="\\")
         write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
         }}}}
 
@@ -218,16 +217,8 @@ dunconstr <- params$dunconstr
 enclosure_depth <- as.integer(params$enclosure_depth)
 depth_sections <- as.integer(params$depth_sections)
 
-# Set contours (parcs)
+# Set contours (percs)
 percs <- params$cs
-# arg_index <- 17
-
-# while (arg_index <= length(args)){
-#   print(args[arg_index])
-#   percs <- c(percs, as.integer(args[arg_index]))
-#   arg_index <- arg_index + 1
-# }
-
 
 # Determining depth section height
 # Currently, heights are marked as the top of a section, so the range between the max and min
