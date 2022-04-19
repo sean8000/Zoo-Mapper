@@ -26,7 +26,7 @@ MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
 BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
-JSON_PATH = 'resources/kde_args.json'
+JSON_PATH = 'kde_args.json'
 
 
 """
@@ -221,7 +221,12 @@ class KDE_Calculation_Page(tk.Toplevel):
         contours = re.sub("\s+\Z", "", contours)
         contours = re.split("\s", contours)
 
-        return contours
+        contour_ints = []
+
+        for c in contours:
+            contour_ints.append(int(c))
+
+        return contour_ints
 
     def set_enclosure_depth(self):
         self.enclosure_depth.set(self.depth_textbox.get(1.0, "end"))
@@ -248,54 +253,22 @@ class KDE_Calculation_Page(tk.Toplevel):
         kde_args['dunconstr'] = self.dunconstr.get()
         kde_args['enclosure_depth'] = self.enclosure_depth.get()
         kde_args['depth_sections'] = self.depth_sections.get()
+        kde_args['output_dir'] = self.outputname
+        kde_args['cs'] = self.get_contours()
 
 
         return kde_args
 
     def run_kde(self):
 
+        self.select_output()
+
         kde_args = self.get_kde_args_dict()
         with open(JSON_PATH, "w") as outfile:
             json.dump(kde_args, outfile)
 
-
-        # # Select output file
-        # self.select_output()
-        
-        # # get contours
-        # cs = self.get_contours()
-        
-        # if(self.noise.get()):
-        #     self.set_enclosure_depth()
-        #     self.set_depth_sections()
-
-        # # Set arguments
-        # r_args = ['Rscript',
-        #             'src/rscripts/3D_KDE_2021.R',
-        #             self.filename.get(),                        # arg 1
-        #             self.bool_to_str(self.is_2d.get()),         # arg 2
-        #             self.name_col.get(),                        # arg 3
-        #             self.x_col.get(),                           # arg 4
-        #             self.y_col.get(),                           # arg 5
-        #             self.z_col.get(),                           # arg 6
-        #             self.bool_to_str(self.noise.get()),         # arg 7
-        #             str(self.m.get()),                          # arg 8
-        #             str(self.n.get()),                          # arg 9
-        #             self.bool_to_str(self.samse.get()),         # arg 10
-        #             self.bool_to_str(self.unconstr.get()),      # arg 11
-        #             self.bool_to_str(self.dscalar.get()),       # arg 12
-        #             self.bool_to_str(self.dunconstr.get()),     # arg 13
-        #             self.outputname,                            # arg 14
-        #             self.enclosure_depth.get(),                 # arg 15
-        #             self.depth_sections.get()                   # arg 16
-        #         ]
-
-        # # Add contours to args
-        # r_args = r_args + cs                                    # arg 17 and on
-
-        # # Call R process
-        # subprocess.call(r_args)
+        subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R'])
 
         # # Alert user that calculations are done
-        # messagebox.showinfo("Complete", "KDE calculations are complete")
+        messagebox.showinfo("Complete", "KDE calculations are complete")
 

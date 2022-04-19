@@ -9,11 +9,7 @@ library(ggplot2)
 library(rjson)
 
 pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
-print("PANDOC PATH BELOW")
-print(pandoc_path)
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
-#Sys.setenv(RSTUDIO_PANDOC="./pandoc")
-#Sys.setenv(RSTUDIO_PANDOC=pandoc_path)
 
 options(stringsAsFactors = FALSE)
 
@@ -150,6 +146,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
       print(paste(name,":",sep="")) # Output results
       print(volumes)
       out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
+      print(out_file_name)
       write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
       }}
   if(nrow(names) > 1 & ifDouble) {
@@ -166,27 +163,23 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
         print(paste(tag,":",sep=""))
         print(volumes)
         out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
+        print(out_file_name)
         write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
         }}}}
 
-# Set Parameters
 
 ## Data Parameters
+
+params <- fromJSON(file="C:/Users/Kevin/Documents/Git/Zoo-Mapper/kde_args.json")
+# params <- fromJSON(file= (getwd() + "\\..\\..\\kde_args.json")
+
 # path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 3D Distances.xlsx"        # Path of data
  sheet <- 1                                                            # Sheet number (starts at 1) 
-# nameCol <- "Focal_Shar"                                               # Name column
-# xCol <- "LongUTM"                                                     # X-coordinate column
-# yCol <- "LatUTM"                                                      # Y-coordinate column
-# zCol <- "DepthM"                                                      # Z-coordinate column
-
-# Output
-#out_file <- "C:/Users/Kevin/Documents/R/output.csv"
 
 ## Processing Parameters
-#dir <- choose.dir(caption="Choose an output directory")  
 # OUTPUT NOW COMES FROM PYTHON CALL
-args = commandArgs(trailingOnly=TRUE)            
-dir <- toString(args[14])
+# args = commandArgs(trailingOnly=TRUE)            
+dir <- params$output_dir
 out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
@@ -195,14 +188,6 @@ excluded <- data.frame(c("Calibration"))                              # Names to
 ifNoise <- TRUE                                                      # Controls if there is noise added
 ifSingle <- TRUE                                                      # Controls if the single-entity KDEs are done
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
-# if2D <- FALSE                                                         # Controls if the analysis is 2D or 3D
-
-## Analysis Parameters
-#percs <- c(50, 95, 100)                                                     # Contour percentages
-#ms <- c(5)                                                          # Scaling factors for bandwidth
-#ns <- c(1)                                                            # Number of stages in bandwidth optimization (1, 2)
-#pilots <- c("samse", "unconstr", "dscalar", "dunconstr")              # Strategy for bandwidth optimization (samse, unconstr, dscalar, dunconstr)
-# pilots <- c("samse")
 
 ## Display Parameters                                                 # Lengths should match length of percs
 colorSingle <- c("red", "black")                                      # Colors for single-entity KDEs
@@ -213,50 +198,45 @@ opacityDouble1 <- c(0.25, 0.50, 0.95)                                       # Op
 opacityDouble2 <- c(0.25, 0.50, 0.95)                                       # Opacities for second entity of 3D double-entity KDEs
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
 
-print("IN 3D_KDE_2021")
-
 #moved args assignment to assignment or DIR for the python menu implementation
 #args = commandArgs(trailingOnly=TRUE)
 
 # Set static args
-path <- toString(args[1])
-if2D <- (args[2] == "t")
-nameCol <- toString(args[3])
-xCol <- toString(args[4])
-yCol <- toString(args[5])
-zCol <- toString(args[6])
-ifNoise <= (args[7] == "t")
-ms <- as.integer(args[8])
-ns <- as.integer(args[9])
-samse <- (args[10]=="t")
-unconstr <- (args[11]=="t")
-dscalar <- (args[12]=="t")
-dunconstr <- (args[13]=="t")
+path <- params$filename
+if2D <- params$is2d
+nameCol <- params$name_col
+xCol <- params$x_col
+yCol <- params$y_col
+zCol <- params$z_col
+ifNoise <- params$noise
+ms <- params$m
+ns <- params$n
+samse <- params$samse
+unconstr <- params$unconstr
+dscalar <- params$dscalar
+dunconstr <- params$dunconstr
+enclosure_depth <- as.integer(params$enclosure_depth)
+depth_sections <- as.integer(params$depth_sections)
 
 # Set contours (parcs)
-percs <- c()
-arg_index <- 17
+percs <- params$cs
+# arg_index <- 17
 
-while (arg_index <= length(args)){
-  print(args[arg_index])
-  percs <- c(percs, as.integer(args[arg_index]))
-  arg_index <- arg_index + 1
-}
+# while (arg_index <= length(args)){
+#   print(args[arg_index])
+#   percs <- c(percs, as.integer(args[arg_index]))
+#   arg_index <- arg_index + 1
+# }
 
-print("CONTOURS:")
-print(percs)
 
 # Determining depth section height
 # Currently, heights are marked as the top of a section, so the range between the max and min
 # depth values goes from the top of the highest section to the top of the lowest section.
 # The range of the bottom section is not included, so we subtract 1 from section count
 # when finding heights of individual sections below
-enclosure_depth <- as.double(args[15])
-depth_sections <- as.double(args[16])
+
 zIncr <- enclosure_depth / depth_sections
 
-print("Z Range")
-print(zIncr)
 
 pilots <- c()
 if(samse){
