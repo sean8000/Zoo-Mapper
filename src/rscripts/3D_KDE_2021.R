@@ -77,6 +77,7 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
   if(typeof(fhat1$x) == "list") { fhat1$x  <- data.matrix(fhat1$x) }
   fhat2 <- kde(data2, H=band2, xmin=bounds[1:dims], xmax=bounds[(dims+1):(dims*2)])
   if(typeof(fhat2$x) == "list") { fhat2$x  <- data.matrix(fhat2$x) }
+  # handle 3D
   if(!if2D) {
     imgName <- paste(imgDir,"/",genLabel(m,n,pilot),".html",sep="")
     plot(fhat1, display="rgl", cont=percs, asp=1, col=colorDouble1, alpha=opacityDouble1)
@@ -84,6 +85,14 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
     scene <- scene3d()
     saveWidget(rglwidget(scene), file=imgName)
     rgl.close() }
+  # handle 2D
+  else{
+    imgName <- paste(imgDir, "/", genLabel(m,n,pilot), ".png", sep="")
+    png(imgName)
+    plot(fhat1, display=display2D, cont=percs, asp=1, col=colorDouble1, alpha=0.5)
+    plot(fhat2, display=display2D, cont=percs, asp=1, add=TRUE, col=colorDouble2, alpha=0.5)
+    dev.off()
+  }
   vols <- vector()
   for(perc in percs) {
     vols <- append(vols, calcKernelVol(fhat1, perc))
