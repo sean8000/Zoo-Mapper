@@ -178,8 +178,13 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
 
 ## Data Parameters
 
-params <- fromJSON(file="C:/Users/Kevin/Documents/Git/Zoo-Mapper/kde_args.json")
-# params <- fromJSON(file= (getwd() + "\\..\\..\\kde_args.json")
+# args[1] is the JSON path
+args = commandArgs(trailingOnly=TRUE)
+print(args)
+
+#Use the next line to hardcode path if line below it is causing problems
+# params <- fromJSON(file="C:/Users/Kevin/Documents/Git/Zoo-Mapper/kde_args.json")
+params <- fromJSON(file = args[1])
 
 # path <- "C:/Users/Kevin/Documents/CISC498/Sample Data for 3D Distances.xlsx"        # Path of data
  sheet <- 1                                                            # Sheet number (starts at 1) 

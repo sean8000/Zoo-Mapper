@@ -18,6 +18,7 @@ import multiprocessing
 import threading
 import re
 import json
+import os
 
 import heatmappage
 
@@ -26,7 +27,7 @@ MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
 BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
-JSON_PATH = 'kde_args.json'
+JSON_PATH = os.getcwd() + '/kde_args.json'
 
 
 """
@@ -267,7 +268,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         with open(JSON_PATH, "w") as outfile:
             json.dump(kde_args, outfile)
 
-        subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R'])
+        subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R', JSON_PATH])
 
         # # Alert user that calculations are done
         messagebox.showinfo("Complete", "KDE calculations are complete")
