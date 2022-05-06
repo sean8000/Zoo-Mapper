@@ -687,13 +687,18 @@ class CalculationInputPage(tk.Toplevel):
 
         # Creates label and Entry field for List of Names. Currently only works with 2 names with a space in the middle
 
-        self.name_label = tk.Label(frm, text='List Names Separated by Space')
+        self.name_label = tk.Label(frm, text='Select 2 Names to Calculate Distances')
         self.name_label.pack(pady=4)
-        self.name_var = tk.Entry(frm)
-        '''self.name_var = tk.Listbox(frm, selectmode=tk.MULTIPLE, height=4)
-        values = ['Red', 'Green', 'Blue', 'Purple', 'Yellow', 'Orange', 'Black', 'White']
+        #oringal implementation of text box
+        #self.name_var = tk.Entry(frm)
+        
+        names = data_frame[options['name_column']].unique()
+        names = list(filter(None, names))
+        print('names:', names)
+        self.name_var = tk.Listbox(frm, selectmode=tk.MULTIPLE, height=4)
+        values = names[1:]
         for val  in values:
-            self.name_var.insert(tk.END, val)'''
+            self.name_var.insert(tk.END, val)
         self.name_var.pack()
         
         self.name_var.pack(pady=4)
@@ -717,7 +722,12 @@ class CalculationInputPage(tk.Toplevel):
         self.submit['command'] = lambda : \
             self.calculateDistances(self.data,
                                     self.time_column_var.get(),
-                                    self.name_var.get())
+                                    (self.name_var.get(0) + ' ' + self.name_var.get(1)))
+        # debugging lambda to get names
+        '''self.submit['command'] = lambda : \
+            print((self.name_var.get(self.name_var.curselection()[0]) + ' ' + self.name_var.get(self.name_var.curselection()[1])))
+        '''
+        # TODO() restrict more than two options
         self.submit.pack(pady=4)
 
     def save_file(self):
@@ -798,6 +808,7 @@ class CalculationInputPage(tk.Toplevel):
 
         names = [HeatMapPage.standardize_string(name) for name in
                  HeatMapPage.process_string_input(names)]
+        print("names after processing:", names)
 
         outputWriter = csv.writer(self.outputFile)
         outputList = []
