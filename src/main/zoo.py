@@ -687,9 +687,15 @@ class CalculationInputPage(tk.Toplevel):
 
         # Creates label and Entry field for List of Names. Currently only works with 2 names with a space in the middle
 
-        self.name_label = tk.Label(frm, text='List Names')
+        self.name_label = tk.Label(frm, text='List Names Separated by Space')
         self.name_label.pack(pady=4)
         self.name_var = tk.Entry(frm)
+        '''self.name_var = tk.Listbox(frm, selectmode=tk.MULTIPLE, height=4)
+        values = ['Red', 'Green', 'Blue', 'Purple', 'Yellow', 'Orange', 'Black', 'White']
+        for val  in values:
+            self.name_var.insert(tk.END, val)'''
+        self.name_var.pack()
+        
         self.name_var.pack(pady=4)
 
         self.b_choose_file = tk.Button(frm, text='Save File As')

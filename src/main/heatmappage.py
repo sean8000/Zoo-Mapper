@@ -509,6 +509,9 @@ class HeatMapPage(tk.Frame):
                     names[i] = None
                 elif HeatMapPage.standardize_string(names[i]) not in names_input:
                     names[i] = None
+        else:
+            # TODO tell user empty input on names to calc distances from is non optional
+            return
 
     @staticmethod
     def process_string_input(str_input):
