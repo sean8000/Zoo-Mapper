@@ -49,7 +49,11 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
   band <- Hpi(data, nstage=n, pilot=pilot)*m # Generate bandwidth matrix
   fhat <- kde(data, H=band) # Generate KDE
   if(typeof(fhat$x) == "list") { fhat$x  <- data.matrix(fhat$x) } # Convert data type to avoid sample size limit
+
+  colorIndexOffset <- 0
+
   if(if2D) { # Create and save 2D plot
+    colorIndexOffset <- 1
     imgName <- paste(imgDir,"/",genLabel(m,n,pilot),".png",sep="")
     png(imgName)
     print(paste("imgName", imgName, sep=" "))
@@ -63,11 +67,23 @@ KDETrialSingle <- function(data, if2D, percs, m, n, pilot, imgDir, colorSingle, 
     saveWidget(rglwidget(scene), file=imgName)
     rgl.close() }
   vols <- vector()
+
+  # Write color key to a file
+  color_key_file <- file(paste(imgDir, "/", "key.txt", sep=""))
+  reversed_percs <- rev(percs)
+  key_entries = c()
+  for(i in 1:length(percs)){
+    key_entries <- c(key_entries, paste(reversed_percs[i], "% Contour: ", colorSingle[i+colorIndexOffset]))
+  }
+
+  writeLines(key_entries, color_key_file)
+  close(color_key_file)
+
   for(perc in percs) { vols <- append(vols, calcKernelVol(fhat,perc)) } # Store calculated volumes
   return(vols) }
 
 
-KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D) { # Tries KDE with given settings for two volumes
+KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2) { # Tries KDE with given settings for two volumes
   band1 <- Hpi(data1, nstage=n, pilot=pilot)*m
   band2 <- Hpi(data2, nstage=n, pilot=pilot)*m
   bounds <- genBounds(data1, data2, if2D) # Generate outer bounds for KDE
@@ -93,6 +109,19 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
     plot(fhat2, display=display2D, cont=percs, asp=1, add=TRUE, col=colorDouble2, alpha=0.5)
     dev.off()
   }
+
+  color_key_file <- file(paste(imgDir, "/", "key.txt", sep=""))
+  reversed_percs <- rev(percs)
+  key_entries = c()
+
+  for(i in 1:length(percs)){
+    key_entries <- c(key_entries, paste(name1, " ", reversed_percs[i], " % Contour: ", colorDouble1[i]))
+    key_entries <- c(key_entries, paste(name2, " ", reversed_percs[i], " % Contour: ", colorDouble2[i]))
+  }
+
+  writeLines(key_entries, color_key_file)
+  close(color_key_file)
+
   vols <- vector()
   for(perc in percs) {
     vols <- append(vols, calcKernelVol(fhat1, perc))
@@ -112,7 +141,7 @@ KDESingle <- function(data, if2D, percs, ms, ns, pilots, imgDir, colorSingle, op
         volumes <- rbind(volumes, row) }}}
   return(volumes) }
 
-KDEDouble <- function(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D) { # Performs KDE for two volumes with all combinations of settings
+KDEDouble <- function(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2) { # Performs KDE for two volumes with all combinations of settings
   volumes <- data.frame(matrix(ncol=1+3*length(percs), nrow=0))
   prefixes <- c("V1", "V2", "V&")
   volnames <- c(outer(prefixes, paste(percs), paste))
@@ -120,7 +149,7 @@ KDEDouble <- function(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDo
   for(m in ms) {
     for(n in ns) {
       for(pilot in pilots) {
-        vols <- KDETrialDouble(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D)
+        vols <- KDETrialDouble(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2)
         row <- data.frame(c(genLabel(m,n,pilot), as.list(vols)))
         colnames(row) <- c("Label", volnames)
         volumes <- rbind(volumes, row) }}}
@@ -168,7 +197,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
         tag <- paste(name1,"&",name2)
         imgDir <- paste(dir,"/",tag,sep="")
         if(! dir.exists(imgDir)) { dir.create(imgDir) }
-        volumes <- KDEDouble(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D)
+        volumes <- KDEDouble(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2)
         print(paste(tag,":",sep=""))
         print(volumes)
         out_file_name = paste(dir, (paste(name1, name2, "output.csv", sep="-")), sep="\\")
@@ -203,12 +232,12 @@ ifSingle <- TRUE                                                      # Controls
 ifDouble <- TRUE                                                      # Controls if the double-entity KDEs are done
 
 ## Display Parameters                                                 # Lengths should match length of percs
-colorSingle <- c("red", "black")                                      # Colors for single-entity KDEs
-colorDouble1 <- c("yellow", "red")                                     # Colors for first entity of 3D double-entity KDEs
-colorDouble2 <- c("pink", "cyan")                                     # Colors for second entity of 3D double-entity KDEs
+colorSingle <- c("red", "orange", "yellow", "pink", "purple")         # Colors for single-entity KDEs
+colorDouble1 <- c("red", "orange", "yellow", "pink")                  # Colors for first entity of 3D double-entity KDEs
+colorDouble2 <- c("green", "blue","cyan", "purple")                   # Colors for second entity of 3D double-entity KDEs
 opacitySingle <- c(0.35, 1)                                           # Opacities for 3D single-entity KDEs
-opacityDouble1 <- c(0.25, 0.50, 0.95)                                       # Opacities for first entity of 3D double-entity KDEs
-opacityDouble2 <- c(0.25, 0.50, 0.95)                                       # Opacities for second entity of 3D double-entity KDEs
+opacityDouble1 <- c(0.25, 0.50, 0.95)                                 # Opacities for first entity of 3D double-entity KDEs
+opacityDouble2 <- c(0.25, 0.50, 0.95)                                 # Opacities for second entity of 3D double-entity KDEs
 display2D <- "filled.contour"                                         # Plot type for 2D (filled.contour, slice, persp, image)
 
 #moved args assignment to assignment or DIR for the python menu implementation
