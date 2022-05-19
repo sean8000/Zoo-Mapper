@@ -93,6 +93,7 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
   if(typeof(fhat1$x) == "list") { fhat1$x  <- data.matrix(fhat1$x) }
   fhat2 <- kde(data2, H=band2, xmin=bounds[1:dims], xmax=bounds[(dims+1):(dims*2)])
   if(typeof(fhat2$x) == "list") { fhat2$x  <- data.matrix(fhat2$x) }
+  colorIndexOffset <- 0
   # handle 3D
   if(!if2D) {
     imgName <- paste(imgDir,"/",genLabel(m,n,pilot),".html",sep="")
@@ -103,6 +104,7 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
     rgl.close() }
   # handle 2D
   else{
+    colorIndexOffset <- 1
     imgName <- paste(imgDir, "/", genLabel(m,n,pilot), ".png", sep="")
     png(imgName)
     plot(fhat1, display=display2D, cont=percs, asp=1, col=colorDouble1, alpha=0.5)
@@ -115,8 +117,8 @@ KDETrialDouble <- function(data1, data2, if2D, percs, m, n, pilot, imgDir, color
   key_entries = c()
 
   for(i in 1:length(percs)){
-    key_entries <- c(key_entries, paste(name1, " ", reversed_percs[i], " % Contour: ", colorDouble1[i]))
-    key_entries <- c(key_entries, paste(name2, " ", reversed_percs[i], " % Contour: ", colorDouble2[i]))
+    key_entries <- c(key_entries, paste(name1, " ", reversed_percs[i], " % Contour: ", colorDouble1[i + colorIndexOffset]))
+    key_entries <- c(key_entries, paste(name2, " ", reversed_percs[i], " % Contour: ", colorDouble2[i + colorIndexOffset]))
   }
 
   writeLines(key_entries, color_key_file)
@@ -174,7 +176,12 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
   colnames(excluded) <- nameCol # Rename columns for processing
   names <- anti_join(names, excluded, by=nameCol) # Remove excluded from names
   if(! dir.exists(dir)) { dir.create(dir) }
-  if(if2D) { colorSingle <- c("white", colorSingle) } # Add background color for 2D plots
+   # Add background color for 2D plots
+  if(if2D) {
+    colorSingle <- c("white", colorSingle)
+    colorDouble1 <- c("white", colorDouble1)
+    colorDouble2 <- c("white", colorDouble2)
+  }
   if(ifSingle) {
     for(i in 1:nrow(names)) {
       name <- as.character(names[i,])
