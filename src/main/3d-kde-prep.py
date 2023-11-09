@@ -8,6 +8,9 @@ import pandas as pd
 import csv
 
 def get_file():
+    """
+    Grabbing the filetype and the filename
+    """
     filetype = ''
     filename = ''
     while(filetype == ''):

@@ -102,6 +102,9 @@ class KDE_Page(tk.Frame):
 
 
     def get_parameters(self):
+        """
+        grabbing all of the information and parameters from the file we have selected
+        """
         options_box = KDE_Calculation_Page(self.filename)
         options_box.wait_window(options_box)
         
@@ -113,79 +116,87 @@ run the KDE script
 """
 class KDE_Calculation_Page(tk.Toplevel):
     def __init__(self, filename):
-        tk.Toplevel.__init__(self)
+        """
+        Initializing everything we will use for the KDE calculatiosn
+        input:
+            self
+            filename: Filename of file where we will be grabbing our data from
+        """
+        tk.Toplevel.__init__(self)  # constucting a main window of an application and amking sure it is in the front of the screen
         self.attributes('-topmost', 'true')
 
-        self.filename = tk.StringVar()
-        self.outputname = tk.StringVar()
-        self.name_col = tk.StringVar()
-        self.x_col = tk.StringVar()
-        self.y_col = tk.StringVar()
-        self.z_col = tk.StringVar()
-        self.is_2d = tk.BooleanVar()
-        self.is_2d.set(False)
-        self.noise = tk.BooleanVar()
-        self.noise.set(False)
-        self.m = tk.IntVar()
-        self.n = tk.IntVar()
+        # We know what data we need for the calcularions so we are specifying the types they should all be
+        self.filename = tk.StringVar()      # filename
+        self.outputname = tk.StringVar()    # unsure
+        self.name_col = tk.StringVar()      # the column with the name of the subject animal
+        self.x_col = tk.StringVar()         # column where x coordinate is recorded
+        self.y_col = tk.StringVar()         # column where y coordinate is recorded
+        self.z_col = tk.StringVar()         # column where z coordinate is recorded
+        self.is_2d = tk.BooleanVar()        # whether we want the model to be 2D or 3D
+        self.is_2d.set(False)               # setting model to 2D
+        self.noise = tk.BooleanVar()        # specifying whether or not we want noise
+        self.noise.set(False)               # specifying we do not want noise
+        self.m = tk.IntVar()                # M will be an integer, represents scaling factor
+        self.n = tk.IntVar()                # N will be an integer, represents stages in bandwidth optimization
+
         self.samse = tk.BooleanVar()
         self.samse.set(False)
         self.unconstr = tk.BooleanVar()
         self.unconstr.set(False)
         self.dscalar = tk.BooleanVar()
         self.dscalar.set(False)
-        self.dunconstr = tk.BooleanVar()
+        self.dunconstr = tk.BooleanVar()    
         self.dunconstr.set(False)
-        self.enclosure_depth = tk.StringVar()
-        self.enclosure_depth.set('1.0')
-        self.depth_sections = tk.StringVar()
-        self.depth_sections.set('1.0')
+        self.enclosure_depth = tk.StringVar()   # Enclosure depth will be a strinf
+        self.enclosure_depth.set('1.0')         # Enclosure depth set
+        self.depth_sections = tk.StringVar()    # depth sections will be a string
+        self.depth_sections.set('1.0')          # depth_sections set
 
 
-        self.filename.set(filename)
+        self.filename.set(filename)         # setting filename to the filename the user input
 
-        self.headers = self.get_headers(self.filename.get())
+        self.headers = self.get_headers(self.filename.get())            #grabbing the names of the headers from the file we input
     
-        name_col_label = tk.Label(self, text='Name Column', bg='white')
-        name_col_label.pack()
-        name_col_dropdown = tk.OptionMenu(self, self.name_col, *self.headers)
+        name_col_label = tk.Label(self, text='Name Column', bg='white')         # creating a column which will have the name of the animals
+        name_col_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+        name_col_dropdown = tk.OptionMenu(self, self.name_col, *self.headers)   # populating column with the data stored in the name column
         name_col_dropdown.pack()
 
-        x_col_label = tk.Label(self, text = "X Column", bg='white')
+        x_col_label = tk.Label(self, text = "X Column", bg='white')         # creating a column that holds the x values
         x_col_label.pack()
-        x_col_dropdown = tk.OptionMenu(self, self.x_col, *self.headers)
+        x_col_dropdown = tk.OptionMenu(self, self.x_col, *self.headers)     # populating the column with the data from the x column from out input file
         x_col_dropdown.pack()
 
-        y_col_label = tk.Label(self, text = "Y Column", bg='white')
-        y_col_label.pack()
-        y_col_dropdown = tk.OptionMenu(self, self.y_col, *self.headers)
+        y_col_label = tk.Label(self, text = "Y Column", bg='white')         # creating column that holds the y values
+        y_col_label.pack() 
+        y_col_dropdown = tk.OptionMenu(self, self.y_col, *self.headers)     # populated the column with the data from the y column from the input file
         y_col_dropdown.pack()
 
-        z_col_label = tk.Label(self, text = "Z Column", bg='white')
+        z_col_label = tk.Label(self, text = "Z Column", bg='white')         # creating a column that will hold the z values
         z_col_label.pack()
-        z_col_dropdown = tk.OptionMenu(self, self.z_col, *self.headers)
+        z_col_dropdown = tk.OptionMenu(self, self.z_col, *self.headers)     # Populated the column with the z values from our input file
         z_col_dropdown.pack()
 
-        m_label = tk.Label(self, text = "Scaling Factor (m)", bg='white')
+        m_label = tk.Label(self, text = "Scaling Factor (m)", bg='white')           # creting the label for the scaling factor
         m_label.pack()
-        m_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.m)
+        m_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.m) # creating the scaling factor and specifying we want it to be horizontal
         m_slider.pack()
 
-        n_label = tk.Label(self, text = "Stages in bandwith optimization (n)", bg='white')
+        n_label = tk.Label(self, text = "Stages in bandwith optimization (n)", bg='white')   # UNSURE
         n_label.pack()
         n_slider = tk.Scale(self, from_=1, to=10, orient=HORIZONTAL, variable=self.n)
         n_slider.pack()
 
         # Select plugins
-        plugins_label = tk.Label(self, text = "Select Plugins", bg = 'white')
+        plugins_label = tk.Label(self, text = "Select Plugins", bg = 'white') # label for selecting the plugins
         plugins_label.pack()
-        samse_checkbox = tk.Checkbutton(self, text='samse', variable=self.samse)
+        samse_checkbox = tk.Checkbutton(self, text='samse', variable=self.samse)    # option for samse plugin
         samse_checkbox.pack()
-        unconstr_checkbox = tk.Checkbutton(self, text='unconstr', variable=self.unconstr)
+        unconstr_checkbox = tk.Checkbutton(self, text='unconstr', variable=self.unconstr) # option for unconstr plugin
         unconstr_checkbox.pack()
-        dscalar_checkbox = tk.Checkbutton(self, text='dscalar', variable=self.dscalar)
+        dscalar_checkbox = tk.Checkbutton(self, text='dscalar', variable=self.dscalar)      # option for dscalar plugin
         dscalar_checkbox.pack()
-        dunconstr_checkbox = tk.Checkbutton(self, text='dunconstr', variable=self.dunconstr)
+        dunconstr_checkbox = tk.Checkbutton(self, text='dunconstr', variable=self.dunconstr)# option for dunconstr plugin
         dunconstr_checkbox.pack()
 
         # # Select contours
@@ -220,10 +231,20 @@ class KDE_Calculation_Page(tk.Toplevel):
         return headers
 
     def create_options(self):
+        """
+        Creating a lis of options based on the names of the columns 
+        """
         options = {}
         options['name_col'] = self.name_col.get()
 
     def bool_to_str(self, b):
+        """
+        inputting a boolean to transform it into a string
+        input:
+            b: boolean
+        output:
+            string representing a boolean
+        """
         if b:
             return 't'
         else:
