@@ -35,17 +35,17 @@ If you are using a Windows system, open up the command prompt (seach cmd in the 
 3. Go to VScode
 4. Navigate to the Zoo-Mapper directory in the terminal
 5. `pip install numpy matplotlib pandas pillow scipy tk tksheet xlrd rpy2`
-    If this doesn't work, then install these libraries separately, xlrd might need `pip install --user xlrd` .
+  * If this doesn't work, then install these libraries separately, xlrd might need `pip install --user xlrd` .
 6. Go to windows search bar → type in env and hit enter
 7. On the bottom right click environment variables
 8. Go to system variables → new
-    Variable name: R_HOME
-    Variable value: %Your path to your R in program files%
-    Example: C:\Program Files\R\R-4.3.1
+  * Variable name: R_HOME
+  * Variable value: %Your path to your R in program files%
+  * Example: C:\Program Files\R\R-4.3.1
 9. Click OK
 10. Edit your path variable (Make sure it’s the one in system variables) → New
 11. Type in %Your previous path/bin/(whatever folder your R.exe is in)
-    Example: C:\Program Files\R\R-4.3.1\bin\x64
+  * Example: C:\Program Files\R\R-4.3.1\bin\x64
 12. Click OK
 13. Go back to vscode
 14. Run zoo.py
