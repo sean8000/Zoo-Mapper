@@ -4,7 +4,7 @@ import matplotlib
 import pandas as pd
 import numpy as np
 import scipy.spatial as ss
-from PIL import ImageTk
+from PIL import ImageTk, ImageOps
 import math
 
 from errors import*
@@ -681,14 +681,15 @@ class StartPage(tk.Frame):
             for c in range(0, cols):
                 self.grid_columnconfigure(c, minsize = math.floor(pageWidth/2))
             
-            #There is an error in this line, can't open image
+            
             #Full path = C:\Zoo-Mapper\src\main\resources\Logo.jpg
             # copied relative path: src\main\resources\Logo.jpg
             # path to heatmap: src\main\heatmappage.py
 
             #FOR FUTURE REFERENCE: relative paths start at src
             image = PIL.Image.open('src/main/resources/Logo.jpg')
-            #image = ImageTk.PhotoImage(file="./resources/Logo.jpg")
+            
+            image = ImageOps.expand(image,border=8,fill='black')
 
             if pageHeight < 507 and pageWidth/2 < 800:
                 canvas.grid_forget()
@@ -715,8 +716,10 @@ class StartPage(tk.Frame):
                 imgW, imgH = 800, 507
                 image = image.resize((imgW, imgH))
                 canvas.config(width = imgW, height = imgH)
-
+            
+            
             image = ImageTk.PhotoImage(image)
+            
             canvas.background = image
             bg = canvas.create_image(0, 0, anchor=tk.NW, image=image)
 
