@@ -680,8 +680,15 @@ class StartPage(tk.Frame):
                 self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8))
             for c in range(0, cols):
                 self.grid_columnconfigure(c, minsize = math.floor(pageWidth/2))
+            
+            #There is an error in this line, can't open image
+            #Full path = C:\Zoo-Mapper\src\main\resources\Logo.jpg
+            # copied relative path: src\main\resources\Logo.jpg
+            # path to heatmap: src\main\heatmappage.py
 
-            image = PIL.Image.open('resources/Logo.jpg')
+            #FOR FUTURE REFERENCE: relative paths start at src
+            image = PIL.Image.open('src/main/resources/Logo.jpg')
+            #image = ImageTk.PhotoImage(file="./resources/Logo.jpg")
 
             if pageHeight < 507 and pageWidth/2 < 800:
                 canvas.grid_forget()
