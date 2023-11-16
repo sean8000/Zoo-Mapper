@@ -6,7 +6,11 @@ library (readxl)
 library (dplyr)
 library (htmlwidgets)
 library(ggplot2)
+#Adding pandoc
+#You must add pandoc AND, it won't work unless you add your install pandoc path to your System PATH
+library(pandoc)
 library(rjson)  
+#You must install all of these libraries in your R ide, also pandoc, in order to run kde
 
 pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
 Sys.setenv(RSTUDIO_PANDOC="C:/Program Files/RStudio/bin/pandoc")
