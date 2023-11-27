@@ -317,6 +317,13 @@ class KDE_Calculation_Page(tk.Toplevel):
 
         subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R', JSON_PATH])
 
+        path = kde_args['output_dir'] + "/KDE_output.xlsx"
+        check_file = os.path.isfile(path)
+        if (check_file):
+            print("That file already exists")
+        else:
+            df = pd.read_csv(kde_args['output_dir'] + "/output_total_double.csv")
+            df.to_excel(path, sheet_name="KDE")
         # # Alert user that calculations are done
         messagebox.showinfo("Complete", "KDE calculations are complete")
 
