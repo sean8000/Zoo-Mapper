@@ -148,16 +148,18 @@ KDESingle <- function(data, if2D, percs, ms, ns, pilots, imgDir, colorSingle, op
   return(volumes) }
 
 KDEDouble <- function(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2) { # Performs KDE for two volumes with all combinations of settings
-  volumes <- data.frame(matrix(ncol=1+3*length(percs), nrow=0))
-  prefixes <- c("V1", "V2", "V&")
-  volnames <- c(outer(prefixes, paste(percs), paste))
-  colnames(volumes) <- c("Label", volnames)
+  
+  #volumes <- data.frame(matrix(ncol=1+3*length(percs), nrow=0))
+  #prefixes <- c("V1", "V2", "V&")
+  #volnames <- c(outer(prefixes, paste(percs), paste))
+  #colnames(volumes) <- c("Label", volnames)
   for(m in ms) {
     for(n in ns) {
       for(pilot in pilots) {
         vols <- KDETrialDouble(data1, data2, if2D, percs, m, n, pilot, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2)
         row <- data.frame(c(genLabel(m,n,pilot), as.list(vols)))
-        colnames(row) <- c("Label", volnames)
+        #colnames(row) <- c("Label", volnames)
+        colnames(row) <- NA
         volumes <- rbind(volumes, row) }}}
   return(volumes) }
 
@@ -187,6 +189,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
     colorDouble2 <- c("white", colorDouble2)
   }
   if(ifSingle) {
+    total_out_file_single <- "C:/3DKDE/Output_from_Zoo/output_total_single.csv"
     for(i in 1:nrow(names)) {
       name <- as.character(names[i,])
       data <- prepData(raw, name, nameCol, xCol, yCol, zCol, zIncr, ifNoise, if2D) # Preprocess data
@@ -197,8 +200,10 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
       print(volumes)
       out_file_name = paste(dir, (paste(name, "output.csv", sep="-")), sep="\\")
       write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
+      write.table(volumes, total_out_file_single, row.names=TRUE, sep=", ", append = TRUE , col.names=TRUE, quote=TRUE, na="NA")
       }}
   if(nrow(names) > 1 & ifDouble) {
+    total_out_file_double <- "C:/3DKDE/Output_from_Zoo/output_total_double.csv"
     for(i in 1:(nrow(names)-1)) {
       name1 <- as.character(names[i,])
       data1 <- prepData(raw, name1, nameCol, xCol, yCol, zCol, zIncr, ifNoise, if2D)
@@ -211,6 +216,10 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
         volumes <- KDEDouble(data1, data2, if2D, percs, ms, ns, pilots, imgDir, colorDouble1, colorDouble2, opacityDouble1, opacityDouble2, display2D, name1, name2)
         print(paste(tag,":",sep=""))
         print(volumes)
+        nameLabel <- paste(tag,":",sep="")
+        write.table("\n", total_out_file_double, row.names=FALSE, sep=", ", append = TRUE , col.names=FALSE, quote=TRUE, na="NA")
+        write.table(nameLabel, total_out_file_double, row.names=FALSE, sep=", ", append = TRUE , col.names=FALSE, quote=TRUE, na="NA")
+        write.table(volumes, total_out_file_double, row.names=FALSE, sep=", ", append = TRUE , col.names=FALSE, quote=TRUE, na="NA")
         out_file_name = paste(dir, (paste(name1, name2, "output.csv", sep="-")), sep="\\")
         write.table(volumes, out_file_name, row.names=TRUE, sep=", ", col.names=TRUE, quote=TRUE, na="NA")
         }}}}
@@ -298,4 +307,12 @@ if(dunconstr){
 }
 
 # Run Program
+file.create("C:/3DKDE/Output_from_Zoo/output_total_single.csv")
+file.create("C:/3DKDE/Output_from_Zoo/output_total_double.csv")
+  volumes <- data.frame(matrix(ncol=1+3*length(percs), nrow=0))
+  prefixes <- c("V1", "V2", "V&")
+  volnames <- c(outer(prefixes, paste(percs), paste))
+  colnames(volumes) <- c("Label", volnames)
+write.table(volumes, "C:/3DKDE/Output_from_Zoo/output_total_double.csv", row.names=TRUE, sep=", ", append = TRUE , col.names=TRUE, quote=TRUE, na="NA")
+
 run(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded, zIncr, ifNoise, ifSingle, ifDouble, if2D, percs, ms, ns, pilots, colorSingle, colorDouble1, colorDouble2, opacitySingle, opacityDouble1, opacityDouble2, display2D)
