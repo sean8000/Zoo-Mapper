@@ -24,6 +24,7 @@ The following Python packages are used in this application and are all found in 
 - `tkinter` version 0.1.0
 - `tksheet` version 5.0.25
 - `xlrd` version 1.2.0
+- `openpyxl` any version
 
 ## Setting up the program
 First, you will need to install a Python version newer than 3.6. We reccoment installing python version 3.9.5 as this was the newest version during our development. The instructions on how to install Python 3.9.5 for your device can be found [here](https://www.python.org/downloads/).
