@@ -35,7 +35,7 @@ If you are using a Windows system, open up the command prompt (seach cmd in the 
 2. Install Python (the current version)
 3. Go to VScode
 4. Navigate to the Zoo-Mapper directory in the terminal
-5. `pip install numpy matplotlib pandas pillow scipy tk tksheet xlrd rpy2`
+5. `pip install numpy matplotlib pandas pillow scipy tk tksheet xlrd rpy2 openpyxl`
     * If this doesn't work, then install these libraries separately, xlrd might need `pip install --user xlrd` .
 6. Go to windows search bar → type in env and hit enter
 7. On the bottom right click environment variables
