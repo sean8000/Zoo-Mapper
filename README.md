@@ -50,7 +50,12 @@ If you are using a Windows system, open up the command prompt (seach cmd in the 
 12. Click OK
 13. Go back to vscode
 14. Run zoo.py
-
+### Setup For Windows (Using Bash File)
+1. Click on setup.bat inside of the setup folder
+3. If you have not downloaded python, please allow the system to install python onto your system
+4. If you have not downloaded R, please allow the system to install R onto your system
+   * When installing, make sure it intalls in the folder C:\Program Files\R
+5. You should be done! Zoo-Mapper will load automatically from this point and future runs can be completed using Zoo-Mapper.bat
 ### For Mac/Linux
 If you are using a Mac or Linux system, open a unix shell. Start by cloning this repository by running `git clone https://github.com/channum/Zoo-Mapper.git`. Then do `cd sezarc` and press enter to move into the project directory. Here, execute the command `pip install -r requirements.txt`. This will install the required packages that were listed above. Now you are all set to get ready to run the application.
 
