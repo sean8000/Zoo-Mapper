@@ -50,7 +50,7 @@ If you are using a Windows system, open up the command prompt (seach cmd in the 
 12. Click OK
 13. Go back to vscode
 14. Run zoo.py
-### Setup For Windows (Using Bash File)
+### Setup For Windows (Using Batch File)
 1. Click on setup.bat inside of the setup folder
 3. If you have not downloaded python, please allow the system to install python onto your system
 4. If you have not downloaded R, please allow the system to install R onto your system
