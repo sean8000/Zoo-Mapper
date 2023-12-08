@@ -687,7 +687,13 @@ class StartPage(tk.Frame):
             # path to heatmap: src\main\heatmappage.py
 
             #FOR FUTURE REFERENCE: relative paths start at src
-            image = PIL.Image.open('resources/Logo.jpg')
+
+            #Changed image to use 'src/main/resources/Logo.jpg' 
+
+            #To have the image in vscode, use: 'src/main/resources/Logo.jpg' 
+            #To have the image in the bat file, use: 'resources/Logo.jpg'
+
+            image = PIL.Image.open('src/main/resources/Logo.jpg')
             
             image = ImageOps.expand(image,border=8,fill='black')
 

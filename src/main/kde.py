@@ -20,7 +20,13 @@ import re
 import json
 import os
 
+import os
+os.environ['R_HOME'] = 'C:\Program Files\R\R-4.3.1'
+
 import heatmappage
+# python -c "import os, sys; print(os.path.dirname(sys.executable))" prints your python path
+#R_HOME = C:\Program Files\R\R-4.3.1
+#Addition to path = C:\Program Files\R\R-4.3.1\bin\x64
 
 LARGE_FONT = ("Bell Gothic Std Black", 40, 'bold')      # setting for the large font
 MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')     # settings for the medium fonts

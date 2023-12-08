@@ -189,7 +189,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
     colorDouble2 <- c("white", colorDouble2)
   }
   if(ifSingle) {
-    total_out_file_single <- "C:/3DKDE/Output_from_Zoo/output_total_single.csv"
+    total_out_file_single <- (paste(dir, "/output_total_single.csv", sep=""))
     for(i in 1:nrow(names)) {
       name <- as.character(names[i,])
       data <- prepData(raw, name, nameCol, xCol, yCol, zCol, zIncr, ifNoise, if2D) # Preprocess data
@@ -203,7 +203,7 @@ run <- function(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded,
       write.table(volumes, total_out_file_single, row.names=TRUE, sep=", ", append = TRUE , col.names=TRUE, quote=TRUE, na="NA")
       }}
   if(nrow(names) > 1 & ifDouble) {
-    total_out_file_double <- "C:/3DKDE/Output_from_Zoo/output_total_double.csv"
+    total_out_file_double <- (paste(dir, "/output_total_double.csv", sep=""))
     for(i in 1:(nrow(names)-1)) {
       name1 <- as.character(names[i,])
       data1 <- prepData(raw, name1, nameCol, xCol, yCol, zCol, zIncr, ifNoise, if2D)
@@ -307,12 +307,12 @@ if(dunconstr){
 }
 
 # Run Program
-file.create("C:/3DKDE/Output_from_Zoo/output_total_single.csv")
-file.create("C:/3DKDE/Output_from_Zoo/output_total_double.csv")
+file.create(paste(dir, "/output_total_single.csv", sep=""))
+file.create(paste(dir, "/output_total_double.csv", sep=""))
   volumes <- data.frame(matrix(ncol=1+3*length(percs), nrow=0))
   prefixes <- c("V1", "V2", "V&")
   volnames <- c(outer(prefixes, paste(percs), paste))
   colnames(volumes) <- c("Label", volnames)
-write.table(volumes, "C:/3DKDE/Output_from_Zoo/output_total_double.csv", row.names=TRUE, sep=", ", append = TRUE , col.names=TRUE, quote=TRUE, na="NA")
+write.table(volumes, (paste(dir, "/output_total_double.csv", sep="")), row.names=TRUE, sep=", ", append = TRUE , col.names=TRUE, quote=TRUE, na="NA")
 
 run(path, sheet, nameCol, xCol, yCol, zCol, dir, out_file, excluded, zIncr, ifNoise, ifSingle, ifDouble, if2D, percs, ms, ns, pilots, colorSingle, colorDouble1, colorDouble2, opacitySingle, opacityDouble1, opacityDouble2, display2D)
