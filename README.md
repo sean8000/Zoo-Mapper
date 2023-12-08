@@ -60,7 +60,7 @@ If you are using a Windows system, open up the command prompt (seach cmd in the 
 If you are using a Mac or Linux system, open a unix shell. Start by cloning this repository by running `git clone https://github.com/channum/Zoo-Mapper.git`. Then do `cd sezarc` and press enter to move into the project directory. Here, execute the command `pip install -r requirements.txt`. This will install the required packages that were listed above. Now you are all set to get ready to run the application.
 
 ## Running the Program
-First, navigate from the main sezarc directory to the directory `/src/main` by running `cd src/main`. Then, simply execute `python zoo.py`.
+Simply Click on Zoo_Mapper.bat to run on windows and ____________ to run on MAC.
 
 ## ZooMapper Tutorials
 We have a few tutorial videos that can help you learn how to use the application. Below are links to the different videos:
