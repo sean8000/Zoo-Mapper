@@ -8,6 +8,7 @@ from numpy import double, true_divide
 import pandas as pd
 import rpy2.robjects as robjects
 from rpy2.robjects import NULL, pandas2ri
+from rpy2.robjects import r
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
@@ -321,6 +322,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         with open(JSON_PATH, "w") as outfile:
             json.dump(kde_args, outfile)
 
+        #Trying shell = True made no difference
         subprocess.call(['Rscript', 'src/rscripts/3D_KDE_2021.R', JSON_PATH])
 
         path = kde_args['output_dir'] + "/KDE_output.xlsx"
@@ -330,6 +332,7 @@ class KDE_Calculation_Page(tk.Toplevel):
         else:
             df = pd.read_csv(kde_args['output_dir'] + "/output_total_double.csv")
             df.to_excel(path, sheet_name="KDE")
+        
         # # Alert user that calculations are done
         messagebox.showinfo("Complete", "KDE calculations are complete")
 
