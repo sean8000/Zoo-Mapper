@@ -1,3 +1,4 @@
+# Modifying heatmappage.py to add in a new button for spreadsheet transformations
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from datetime import datetime
@@ -23,6 +24,7 @@ from heatmap import InputError
 from heatmappage import HeatMapPage
 from heatmappage import StartPage
 from kde import KDE_Page, KDE_Calculation_Page
+from transformations import Transformations_Page
 
 import matplotlib.cm as cm
 import matplotlib.image as mpimg
@@ -156,7 +158,7 @@ class ZooMapper(tk.Tk):
         self.selected_sheet = False
         self.submit_selection = False
 
-        for F in (StartPage, PageOne, PageTwo, HeatMapPage, KDE_Page):
+        for F in (StartPage, PageOne, PageTwo, HeatMapPage, KDE_Page, Transformations_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame

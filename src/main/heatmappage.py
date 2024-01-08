@@ -1,5 +1,7 @@
 from tkinter.ttk import Style
 
+from transformations import Transformations_Page
+
 import matplotlib
 import pandas as pd
 import numpy as np
@@ -648,6 +650,10 @@ class StartPage(tk.Frame):
         button4 = ttk.Button(self, text="KDE",
                             command=lambda: controller.show_frame(KDE_Page))
         button4.grid(row=4, column=0, sticky=N)
+
+        button4 = ttk.Button(self, text="Data Transformations",
+                            command=lambda: controller.show_frame(Transformations_Page))
+        button4.grid(row=5, column=0, sticky=N)
 
         buttons = {button1, button2, button3, button4}
 

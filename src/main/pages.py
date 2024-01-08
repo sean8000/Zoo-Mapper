@@ -34,6 +34,7 @@ import re
 import shlex
 
 from tksheet import Sheet
+import heatmappage
 from heatmappage import HeatMapPage
 from heatmappage import StartPage
 import csv
