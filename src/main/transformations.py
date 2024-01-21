@@ -156,14 +156,13 @@ class Params_Page(tk.Toplevel):
 
     def run_transformations(self):
         self.select_output()
-        print("hello!")
-        print(self.filename.get())
-        print(self.invert_col.get())
-        print(self.outputname)
+
         df = pd.read_excel(self.filename.get(), sheet_name=0)
 
 
-        df['Inverted'] = -1 * df[self.invert_col.get()]
+        df[self.invert_col.get()] = -1 * df[self.invert_col.get()]
 
-        outdir = self.outputname + "/Inverted_Spreadsheet.xlsx"
+        file_name = os.path.splitext(os.path.basename(self.filename.get()))[0]
+        outdir = self.outputname + "/" + file_name + "_Inverted.xlsx"
         df.to_excel(outdir)
+        messagebox.showinfo("Complete", "Data Inversion is Complete")

@@ -164,7 +164,7 @@ class ZooMapper(tk.Tk):
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky=NSEW)
-
+        
         self.show_frame(StartPage)
 
     def close_application(self):

@@ -623,18 +623,21 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+
         label = tk.Label(self, text="Zoo Mapper", font=LARGE_FONT, bg=BACKGROUND_COLOR)
         #label.pack(pady=10, padx=10)
         
 
         #self.grid(in_ = parent, row = 0, column = 0, columnspan = 3, rowspan = 3, sticky = NSEW)
 
+        
+        #start of buttons
         style = Style()
         style.configure('TButton', font=BUTTON_FONT,
                         borderwidth='4')
         style.map('TButton', foreground=[('active', '!disabled', 'green')],
                   background=[('active', 'black')])
-
+        
         button1 = ttk.Button(self, text="New Import", style="TButton",
                             command=lambda: controller.get_spreadsheet())
         button1.grid(row = 1, column = 0, sticky = S)
@@ -651,11 +654,21 @@ class StartPage(tk.Frame):
                             command=lambda: controller.show_frame(KDE_Page))
         button4.grid(row=4, column=0, sticky=N)
 
-        button4 = ttk.Button(self, text="Data Transformations",
+        button5 = ttk.Button(self, text="Data Inversion",
                             command=lambda: controller.show_frame(Transformations_Page))
-        button4.grid(row=5, column=0, sticky=N)
+        button5.grid(row=5, column=0, sticky=N)
 
-        buttons = {button1, button2, button3, button4}
+        button6 = ttk.Button(self, text="Categorical Data",
+                            command=lambda: controller.show_frame(Transformations_Page))
+        button6.grid(row=6, column=0, sticky=N)
+
+        button7 = ttk.Button(self, text="Data Joins",
+                            command=lambda: controller.show_frame(Transformations_Page))
+        button7.grid(row=7, column=0, sticky=N)
+        
+
+
+        buttons = {button1, button2, button3, button4, button5, button6, button7}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 
@@ -669,6 +682,14 @@ class StartPage(tk.Frame):
         enclosure_image = Label(image="")
         enclosure_image.pack()
 
+        #Scrollbar
+        #scrollbar = tk.Scrollbar(tk.Frame(self), orient=VERTICAL, command=(canvas).yview)
+        #scrollbar.pack(side=RIGHT, fill=Y)
+
+        #canvas.configure(yscrollcommand=scrollbar.set)
+        #canvas.bind(
+    #'<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
         def changeScale(event):
             """
             Handles scaling of application as window is resized
@@ -677,10 +698,13 @@ class StartPage(tk.Frame):
             pageHeight = event.height
             #print(str(pageWidth)+", "+str(pageHeight))
 
+            #Label Position on grid
             label.config(wraplength = math.floor(pageWidth/2))
             label.grid(row = 0, column = 0, sticky = S)
 
-            self.grid_rowconfigure(0, pad = pageHeight/4)
+            #If you want Image directly in the middle, the use pageheight/4. == original
+            # New value to accomodate more rows is pageheight/12, used because unsure how to add scroll wheel
+            self.grid_rowconfigure(0, pad = pageHeight/12)
 
             for r in range(1, rows):
                 self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8))
