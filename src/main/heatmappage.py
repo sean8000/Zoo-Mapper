@@ -1,7 +1,7 @@
 from tkinter.ttk import Style
 
 from transformations import Transformations_Page
-
+from categories import Categories_Page
 import matplotlib
 import pandas as pd
 import numpy as np
@@ -659,7 +659,7 @@ class StartPage(tk.Frame):
         button5.grid(row=5, column=0, sticky=N)
 
         button6 = ttk.Button(self, text="Categorical Data",
-                            command=lambda: controller.show_frame(Transformations_Page))
+                            command=lambda: controller.show_frame(Categories_Page))
         button6.grid(row=6, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
