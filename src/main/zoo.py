@@ -26,7 +26,7 @@ from heatmappage import StartPage
 from kde import KDE_Page, KDE_Calculation_Page
 from transformations import Transformations_Page
 from categories import Categories_Page
-
+from joins import Joins_Page
 import matplotlib.cm as cm
 import matplotlib.image as mpimg
 
@@ -160,7 +160,7 @@ class ZooMapper(tk.Tk):
         self.submit_selection = False
 
         for F in (StartPage, PageOne, PageTwo, HeatMapPage, KDE_Page, Transformations_Page, 
-                  Categories_Page):
+                  Categories_Page, Joins_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame
