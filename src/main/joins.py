@@ -163,6 +163,10 @@ class Params_Page(tk.Toplevel):
 		self.outputname = tk.StringVar()    # unsure
 		self.lightDateTime = tk.StringVar()   
 		self.rawSessionStartTime = tk.StringVar()   
+		self.dateTime = tk.StringVar() 
+		self.categ = tk.StringVar()
+		self.channelType = tk.StringVar()
+		self.channelDuration = tk.StringVar()
 
 		self.filename.set(filename)         # setting filename to the filename the user input
 		self.filename2.set(filename2)
@@ -178,6 +182,26 @@ class Params_Page(tk.Toplevel):
 		rawSessionStartTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
 		rawSessionStartTime_dropdown = tk.OptionMenu(self, self.rawSessionStartTime, *self.headers2)   # populating column with the data stored in the  column
 		rawSessionStartTime_dropdown.pack()
+
+		dateTime_label = tk.Label(self, text='Data Date Time Column', bg='white')       # Name of the column you want to invert
+		dateTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+		dateTime_dropdown = tk.OptionMenu(self, self.dateTime, *self.headers2)   # populating column with the data stored in the  column
+		dateTime_dropdown.pack()
+
+		categ_label = tk.Label(self, text='Behavior Desc. Column', bg='white')       # Name of the column you want to invert
+		categ_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+		categ_dropdown = tk.OptionMenu(self, self.categ, *self.headers2)   # populating column with the data stored in the  column
+		categ_dropdown.pack()
+
+		channelType_label = tk.Label(self, text='Channel Type Column', bg='white')       # Name of the column you want to invert
+		channelType_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+		channelType_dropdown = tk.OptionMenu(self, self.channelType, *self.headers2)   # populating column with the data stored in the  column
+		channelType_dropdown.pack()
+
+		channelDuration_label = tk.Label(self, text='Continuous Channel Duration Column', bg='white')       # Name of the column you want to invert
+		channelDuration_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+		channelDuration_dropdown = tk.OptionMenu(self, self.channelDuration, *self.headers2)   # populating column with the data stored in the  column
+		channelDuration_dropdown.pack()
 
 		tmp_button = tk.Button(self, text="Run Join",
 								command=lambda: self.run_join())
@@ -196,6 +220,24 @@ class Params_Page(tk.Toplevel):
 		validFile = False
 		self.outputname = filedialog.askdirectory(title = "Select a Directory for Output")
 
+	def find_closest_time(self, df, datetime):
+
+		#This is the difference at the start, which is datetime - 1 day
+		excelDateTime = self.dateTime.get()
+		behavior = self.categ.get()
+		time_difference = (datetime - (datetime - pd.DateOffset(1))).total_seconds()
+		returnIndex = -1
+
+		for i, row in df.iterrows():
+			#Remember to convert time to datetime
+			sub_time = abs((datetime - pd.to_datetime(row[excelDateTime])).total_seconds())
+			#Only currently works with this specific 'Repetitive rubbing' string, case specific
+			if sub_time < time_difference and row[behavior] == 'Repetitive rubbing':
+				time_difference = sub_time
+				returnIndex = i
+	
+		return returnIndex
+		
 	def run_join(self):
 		self.select_output()
 		rawTime = self.rawSessionStartTime.get()
@@ -214,6 +256,30 @@ class Params_Page(tk.Toplevel):
 		df_merged = pd.merge(df_raw, df_light, on='Rounded_Session_Start_time', how="left")  
 		df_merged = df_merged.drop('Session Start Time_dup', axis=1)
 		df_merged= df_merged.rename(columns={'#': 'Matching Row'})
+
+		#Initial join above #deals with times
+		#Second aspect of join below #deals with behaviors
+
+		for i, row in df_merged.iterrows():
+			#Remember to convert time to datetime
+			#Only works with continuous times
+			channelType = self.channelType.get()
+			channelDuration = self.channelDuration.get()
+			excelDateTime = self.dateTime.get()
+			if row[channelType] == 'Continuous':
+				print("continuous")
+				stored_value = int (row[channelDuration])
+				print(int(stored_value))
+				timestamp = pd.to_datetime(row[excelDateTime])
+				return_value = self.find_closest_time(df_merged, timestamp)
+				print(df_merged[excelDateTime][return_value])
+				if pd.isnull(df_merged.loc[return_value, channelDuration]):
+					df_merged.at[return_value, channelDuration] = stored_value
+				else:
+					df_merged.at[return_value, channelDuration] = str(df_merged.at[return_value, channelDuration]) + ", " + str(stored_value)
+
+		#For some reason not working in applied version, but did in hardcoded version
+		#df_merged = df_merged.drop('Unnamed: 0', axis=1)
 
 		file_name = os.path.splitext(os.path.basename(self.filename2.get()))[0]
 		outdir = self.outputname + "/" + file_name + "_Data_Join.xlsx"
