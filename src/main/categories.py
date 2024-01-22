@@ -132,7 +132,7 @@ class Params_Page(tk.Toplevel):
 
         self.headers = self.get_headers(self.filename.get())            #grabbing the names of the headers from the file we input
     
-        categ_label = tk.Label(self, text='Category Desc. Column', bg='white')       # Name of the column you want to invert
+        categ_label = tk.Label(self, text='Behavior Desc. Column', bg='white')       # Name of the column you want to invert
         categ_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
         categ_dropdown = tk.OptionMenu(self, self.categ, *self.headers)   # populating column with the data stored in the  column
         categ_dropdown.pack()
