@@ -651,25 +651,28 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(HeatMapPage))
         button3.grid(row = 3, column = 0, sticky = N)
 
+        #Getting rid of KDE button4
+        """
         button4 = ttk.Button(self, text="KDE",
                             command=lambda: controller.show_frame(KDE_Page))
         button4.grid(row=4, column=0, sticky=N)
+        """
 
         button5 = ttk.Button(self, text="Data Inversion",
                             command=lambda: controller.show_frame(Transformations_Page))
-        button5.grid(row=5, column=0, sticky=N)
+        button5.grid(row=4, column=0, sticky=N)
 
         button6 = ttk.Button(self, text="Categorical Data",
                             command=lambda: controller.show_frame(Categories_Page))
-        button6.grid(row=6, column=0, sticky=N)
+        button6.grid(row=5, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
                             command=lambda: controller.show_frame(Joins_Page))
-        button7.grid(row=7, column=0, sticky=N)
+        button7.grid(row=6, column=0, sticky=N)
         
 
-
-        buttons = {button1, button2, button3, button4, button5, button6, button7}
+        #removing button4
+        buttons = {button1, button2, button3, button5, button6, button7}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 
@@ -700,15 +703,18 @@ class StartPage(tk.Frame):
             #print(str(pageWidth)+", "+str(pageHeight))
 
             #Label Position on grid
+             #Original values going down are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
             label.config(wraplength = math.floor(pageWidth/2))
             label.grid(row = 0, column = 0, sticky = S)
 
+            #Original values are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
+
             #If you want Image directly in the middle, the use pageheight/4. == original
             # New value to accomodate more rows is pageheight/12, used because unsure how to add scroll wheel
-            self.grid_rowconfigure(0, pad = pageHeight/12)
+            self.grid_rowconfigure(0, pad = pageHeight/4)
 
             for r in range(1, rows):
-                self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8))
+                self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8.5))
             for c in range(0, cols):
                 self.grid_columnconfigure(c, minsize = math.floor(pageWidth/2))
             
