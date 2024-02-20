@@ -194,7 +194,7 @@ class ZooMapper(tk.Tk):
 
         dr = OptionMenu(popup, cl, *options)
         dr.pack()
-
+        
         B1 = Button(popup, text='Cancel', command=popup.destroy)
         B1.pack(side='bottom', fill='y')
 
