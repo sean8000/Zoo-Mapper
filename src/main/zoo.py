@@ -159,7 +159,8 @@ class ZooMapper(tk.Tk):
         self.selected_sheet = False
         self.submit_selection = False
 
-        for F in (StartPage, PageOne, PageTwo, HeatMapPage, KDE_Page, Transformations_Page, 
+        #Took out """KDE_Page"""
+        for F in (StartPage, PageOne, PageTwo, HeatMapPage, Transformations_Page, 
                   Categories_Page, Joins_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)

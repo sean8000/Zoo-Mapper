@@ -242,7 +242,8 @@ params <- fromJSON(file = args[1])
 # OUTPUT NOW COMES FROM PYTHON CALL
 # args = commandArgs(trailingOnly=TRUE)            
 dir <- params$output_dir
-out_file <- paste(dir, "output.csv", sep="\\")                                     # Output directory
+out_file <- paste(dir, "output.csv", sep="\\")    
+print(out_file)                                 # Output directory
 # out_file <- paste(dir, "/output.csv")
 # dir <- file.choose()
 excluded <- data.frame(c("Calibration"))                              # Names to be excluded
