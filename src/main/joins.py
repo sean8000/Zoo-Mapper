@@ -257,6 +257,7 @@ class Params_Page(tk.Toplevel):
 		df_merged = df_merged.drop('Session Start Time_dup', axis=1)
 		df_merged= df_merged.rename(columns={'#': 'Matching Row'})
 
+		
 		#Initial join above #deals with times
 		#Second aspect of join below #deals with behaviors
 
@@ -267,20 +268,32 @@ class Params_Page(tk.Toplevel):
 			channelDuration = self.channelDuration.get()
 			excelDateTime = self.dateTime.get()
 			if row[channelType] == 'Continuous':
-				print("continuous")
+				print("continuous at: ", i)
+				#print("Keyval error at: ", i)
 				stored_value = int (row[channelDuration])
-				print(int(stored_value))
+				print("The stored value for the rubbing is: ", int(stored_value))
 				timestamp = pd.to_datetime(row[excelDateTime])
+				#print('before closest time')
 				return_value = self.find_closest_time(df_merged, timestamp)
-				print(df_merged[excelDateTime][return_value])
-				if pd.isnull(df_merged.loc[return_value, channelDuration]):
-					df_merged.at[return_value, channelDuration] = stored_value
+				#print("after closest time")
+				print("Closest time returned: ", stored_value)
+				if (return_value == -1):
+					#print("There was nothing closest to this time, -1 returned ")
+					messagebox.showinfo("Complete", "Data Joins failed due to range outside of a day")
+					raise Exception("There is a spreadsheet entry with a continuous behavior, and no rubbing behavior within that day")
 				else:
-					df_merged.at[return_value, channelDuration] = str(df_merged.at[return_value, channelDuration]) + ", " + str(stored_value)
+					print("The returned date time of this current column is: ", df_merged[excelDateTime][i])
+					print("The returned time is: ", df_merged[excelDateTime][return_value])
+					if pd.isnull(df_merged.loc[return_value, channelDuration]):
+						df_merged.at[return_value, channelDuration] = stored_value
+					else:
+						print("Adding second value...")
+						df_merged.at[return_value, channelDuration] = str(df_merged.at[return_value, channelDuration]) + ", " + str(stored_value)
 
 		#For some reason not working in applied version, but did in hardcoded version
 		#df_merged = df_merged.drop('Unnamed: 0', axis=1)
 
+		
 		file_name = os.path.splitext(os.path.basename(self.filename2.get()))[0]
 		outdir = self.outputname + "/" + file_name + "_Data_Join.xlsx"
 		df_merged.to_excel(outdir)
