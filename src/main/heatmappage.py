@@ -39,12 +39,17 @@ import shlex
 from tksheet import Sheet
 import csv
 
+from tkmacosx import Button
 from kde import KDE_Page
+from transformations import Transformations_Page
+from joins import Joins_Page
 
 LARGE_FONT = ("Bell Gothic Std Black", 40, 'bold')
 MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
 BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
+BUTTON_BACKGROUND_COLOR = "#5a5760"
+BUTTON_FORGROUND_COLOR = "#e6e5e6"
 LIGHT_BLUE = '#d4e1fa'
 
 class HeatMapPage(tk.Frame):
@@ -623,54 +628,59 @@ class StartPage(tk.Frame):
     """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.width, self.height = parent.winfo_width(), parent.winfo_height()
 
-
-        label = tk.Label(self, text="Zoo Mapper", font=LARGE_FONT, bg=BACKGROUND_COLOR)
-        #label.pack(pady=10, padx=10)
-        
-
-        #self.grid(in_ = parent, row = 0, column = 0, columnspan = 3, rowspan = 3, sticky = NSEW)
+        label = tk.Label(self, text="Zoo Mapper", font=LARGE_FONT, background=BACKGROUND_COLOR)
+        self.grid(in_ = parent, row = 0, column = 0, columnspan = 3, rowspan = 3, sticky = NSEW)
 
         
-        #start of buttons
+        #start of buttons, note this doesnt affect the style of Button(), but ttk.Button(). So for mac this does nothing.
         style = Style()
         style.configure('TButton', font=BUTTON_FONT,
                         borderwidth='4')
         style.map('TButton', foreground=[('active', '!disabled', 'green')],
                   background=[('active', 'black')])
         
-        button1 = ttk.Button(self, text="New Import", style="TButton",
-                            command=lambda: controller.get_spreadsheet())
+
+        # WARNING!: Button() is for mac, ttk.Button is for other systems
+
+        # button2 = ttk.Button(self, text="Load Import", style="TButton",
+        #                     command=lambda: controller.load_import(self))
+        button1 = Button(self, text="New Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.get_spreadsheet(), borderless=1)
         button1.grid(row = 1, column = 0, sticky = S)
 
-        button2 = ttk.Button(self, text="Load Import", style="TButton",
-                            command=lambda: controller.load_import(self))
+        # button2 = ttk.Button(self, text="Load Import", style="TButton",
+        #                     command=lambda: controller.load_import(self))
+        button2 = Button(self, text="Load Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.load_import(self), borderless=1)
         button2.grid(row = 2, column = 0)
 
-        button3 = ttk.Button(self, text="Graph",
-                             command=lambda: controller.show_frame(HeatMapPage))
+        # button3 = ttk.Button(self, text="Graph",
+        #                      command=lambda: controller.show_frame(HeatMapPage))
+        button3 = Button(self, text="Graph", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.show_frame(HeatMapPage), borderless=1)
         button3.grid(row = 3, column = 0, sticky = N)
-
-        #Getting rid of KDE button4
+        
+        button4 = ttk.Button(self, text="Peter was Here (Joins_Page)",
+                            command=lambda: controller.show_frame(Joins_Page))
+        button4.grid(row=4, column=0, sticky = N)
+        
         """
-        button4 = ttk.Button(self, text="KDE",
-                            command=lambda: controller.show_frame(KDE_Page))
-        button4.grid(row=4, column=0, sticky=N)
-        """
+        button4.grid(row=4, column=0, sticky=N)#buttons
 
         button5 = ttk.Button(self, text="Data Inversion",
                             command=lambda: controller.show_frame(Transformations_Page))
-        button5.grid(row=4, column=0, sticky=N)
+        button5.grid(row=5, column=0, sticky=N)
 
         button6 = ttk.Button(self, text="Categorical Data",
                             command=lambda: controller.show_frame(Categories_Page))
-        button6.grid(row=5, column=0, sticky=N)
+        button6.grid(row=6, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
                             command=lambda: controller.show_frame(Joins_Page))
-        button7.grid(row=6, column=0, sticky=N)
+        button7.grid(row=7, column=0, sticky=N)
         
-
         #removing button4
         buttons = {button1, button2, button3, button5, button6, button7}
 
@@ -679,33 +689,43 @@ class StartPage(tk.Frame):
         windowWidth = parent.winfo_screenwidth()
         windowHeight = parent.winfo_screenheight()
 
+        canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
         canvas.grid(row = 0, column = 1, rowspan = 6)
 
         cols, rows = self.grid_size()
 
-        enclosure_image = Label(image="")
-        enclosure_image.pack()
+        """
 
-        #Scrollbar
-        #scrollbar = tk.Scrollbar(tk.Frame(self), orient=VERTICAL, command=(canvas).yview)
-        #scrollbar.pack(side=RIGHT, fill=Y)
+        #PIL.Image.open... code was done on mac, the path may be diffrent on other machines.
+        img = PIL.Image.open('resources/Logo.jpg')
+        img = ImageTk.PhotoImage(img)
 
-        #canvas.configure(yscrollcommand=scrollbar.set)
-        #canvas.bind(
-    #'<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        enclosure_image = Label(self, image=img)
+        enclosure_image.image = img #NEEDED because python forgets the image referance
+        enclosure_image.grid(row = 0, column = 1, rowspan = 6)
+        
+
+        
+        #     Scrollbar
+        #     scrollbar = tk.Scrollbar(tk.Frame(self), orient=VERTICAL, command=(canvas).yview)
+        #     scrollbar.pack(side=RIGHT, fill=Y)
+
+        #     canvas.configure(yscrollcommand=scrollbar.set)
+        #     canvas.bind(
+        # '<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
         def changeScale(event):
-            """
-            Handles scaling of application as window is resized
-            """
+            
+            #Handles scaling of application as window is resized
+            
             pageWidth = event.width
             pageHeight = event.height
             #print(str(pageWidth)+", "+str(pageHeight))
 
             #Label Position on grid
-             #Original values going down are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
+            #Original values going down are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
             label.config(wraplength = math.floor(pageWidth/2))
-            label.grid(row = 0, column = 0, sticky = S)
+            label.grid(row = 0, column = 0, sticky = NSEW)
 
             #Original values are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
 
@@ -713,9 +733,9 @@ class StartPage(tk.Frame):
             # New value to accomodate more rows is pageheight/12, used because unsure how to add scroll wheel
             self.grid_rowconfigure(0, pad = pageHeight/4)
 
-            for r in range(1, rows):
+            for r in range(1, row):
                 self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8.5))
-            for c in range(0, cols):
+            for c in range(0, col):
                 self.grid_columnconfigure(c, minsize = math.floor(pageWidth/2))
             
             
@@ -730,12 +750,26 @@ class StartPage(tk.Frame):
             #To have the image in vscode, use: 'src/main/resources/Logo.jpg' 
             #To have the image in the bat file, use: 'resources/Logo.jpg'
 
-            image = PIL.Image.open('src/main/resources/Logo.jpg')
+            # image = PIL.Image.open('src/main/resources/Logo.jpg')
             
-            image = ImageOps.expand(image,border=8,fill='black')
+            # image = ImageOps.expand(image,border=8,fill='black')
+                
+            img = PIL.Image.open('resources/Logo.jpg')
+            img = ImageOps.expand(img,border=8,fill='black')
+
+
+
+            enclosure_image = Label(self, image=img)
+            enclosure_image.image = img #NEEDED because python forgets the image referance
+
 
             if pageHeight < 507 and pageWidth/2 < 800:
-                canvas.grid_forget()
+                # canvas.grid_forget()
+                # self.grid_columnconfigure(0, minsize = pageWidth)
+                # self.grid_rowconfigure(0, pad = 0)
+                # label.config(wraplength = math.floor(pageWidth*(4/5)))
+            
+                enclosure_image.grid_forget()
                 self.grid_columnconfigure(0, minsize = pageWidth)
                 self.grid_rowconfigure(0, pad = 0)
                 label.config(wraplength = math.floor(pageWidth*(4/5)))
@@ -766,4 +800,21 @@ class StartPage(tk.Frame):
             canvas.background = image
             bg = canvas.create_image(0, 0, anchor=tk.NW, image=image)
 
-        parent.bind('<Configure>', changeScale)
+            print("widget", event.widget)
+            print("height", event.height, "width", event.width)
+
+        parent.bind('Configure', changeScale)
+
+
+    def resize(event):
+        pageWidth = event.width
+        pageHeight = event.height
+
+        if(pageHeight < 507 and pageWidth/2 < 800):
+
+            #event.widget and event.widget.cget("text") == "startpage"):
+            print("widget:", event.widget)
+            print((event.widget != ".!frame.!startpage"))
+            print(type(event.widget.state))
+            #print(event.widget.cget("text"))
+            print("height", event.height, "width", event.width)

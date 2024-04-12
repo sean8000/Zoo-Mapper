@@ -21,3 +21,5 @@ pip install rpy2
 echo 10
 pip install openpyxl
 echo 11
+pip install tkmacosx
+echo 12

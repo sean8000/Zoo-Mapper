@@ -161,7 +161,7 @@ class ZooMapper(tk.Tk):
 
         #Took out """KDE_Page"""
         for F in (StartPage, PageOne, PageTwo, HeatMapPage, Transformations_Page, 
-                  Categories_Page, Joins_Page):
+                  Categories_Page, Joins_Page, KDE_Page): #front page
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame
@@ -585,6 +585,7 @@ Yuzu Wu
 Michael Yacucci
 Shuobofang Yang
 Arthur Marino
+Peter Haushalter
 ''')
 
     def show_frame(self, cont):
@@ -1570,4 +1571,5 @@ class SheetView(tk.Tk, tk.Toplevel):
 
 
 app = ZooMapper()
+app.bind("<Configure>", StartPage.resize)
 app.mainloop()
