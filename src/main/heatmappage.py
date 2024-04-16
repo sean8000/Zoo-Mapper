@@ -9,6 +9,7 @@ import numpy as np
 import scipy.spatial as ss
 from PIL import ImageTk, ImageOps
 import math
+import platform
 
 from errors import*
 import time
@@ -642,29 +643,34 @@ class StartPage(tk.Frame):
                   background=[('active', 'black')])
         
 
-        # WARNING!: Button() is for mac, ttk.Button is for other systems
-
-        # button2 = ttk.Button(self, text="Load Import", style="TButton",
-        #                     command=lambda: controller.load_import(self))
-        button1 = Button(self, text="New Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+        OS_platform = platform.uname().system
+        print("OS is: ", OS_platform)
+        if(OS_platform == "Darwin"):
+            # WARNING!: Button() is for mac, ttk.Button is for other systems
+            button1 = Button(self, text="New Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.get_spreadsheet(), borderless=1)
-        button1.grid(row = 1, column = 0, sticky = S)
-
-        # button2 = ttk.Button(self, text="Load Import", style="TButton",
-        #                     command=lambda: controller.load_import(self))
-        button2 = Button(self, text="Load Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+            button2 = Button(self, text="Load Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.load_import(self), borderless=1)
-        button2.grid(row = 2, column = 0)
-
-        # button3 = ttk.Button(self, text="Graph",
-        #                      command=lambda: controller.show_frame(HeatMapPage))
-        button3 = Button(self, text="Graph", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+            button3 = Button(self, text="Graph", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.show_frame(HeatMapPage), borderless=1)
-        button3.grid(row = 3, column = 0, sticky = N)
-        
-        button4 = ttk.Button(self, text="Peter was Here (Joins_Page)",
-                            command=lambda: controller.show_frame(Joins_Page))
-        button4.grid(row=4, column=0, sticky = N)
+            button4 = Button(self, text="Peter was Here (Joins_Page)", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.show_frame(Joins_Page), borderless=1)
+            
+        else:
+            # Windows, and linux. Linux is not tested
+            button1 = ttk.Button(self, text="New Import", style="TButton",
+                                command=lambda: controller.get_spreadsheet())
+            button2 = ttk.Button(self, text="Load Import", style="TButton",
+                                command=lambda: controller.load_import(self))
+            button3 = ttk.Button(self, text="Graph",
+                                 command=lambda: controller.show_frame(HeatMapPage))
+            button4 = ttk.Button(self, text="Peter was Here (Joins_Page)",
+                                 command=lambda: controller.show_frame(Joins_Page))
+            
+        button1.grid(row = 1, column = 0, sticky = S)
+        button2.grid(row = 2, column = 0, sticky = S)
+        button3.grid(row = 3, column = 0, sticky = S)
+        button4.grid(row = 4, column = 0, sticky = S)
         
         """
         button4.grid(row=4, column=0, sticky=N)#buttons
@@ -810,11 +816,23 @@ class StartPage(tk.Frame):
         pageWidth = event.width
         pageHeight = event.height
 
-        if(pageHeight < 507 and pageWidth/2 < 800):
+        if((pageHeight < 507 or pageWidth < 800)
+            and event.widget.winfo_name() == "!startpage"):
 
-            #event.widget and event.widget.cget("text") == "startpage"):
-            print("widget:", event.widget)
-            print((event.widget != ".!frame.!startpage"))
-            print(type(event.widget.state))
-            #print(event.widget.cget("text"))
+            # img = PIL.Image.open('resources/Logo.jpg')
+            # img = ImageOps.expand(img,border=8,fill='black')
+
+            # enclosure_image = Label(event.width, image=img)
+            # enclosure_image.image = img #NEEDED because python forgets the image referance
+
+
+            # enclosure_image.grid_forget()
+            # self.grid_columnconfigure(0, minsize = pageWidth)
+            # self.grid_rowconfigure(0, pad = 0)
+            # label.config(wraplength = math.floor(pageWidth*(4/5)))
+
+            print("_______")
+            print(event.widget.winfo_name())
+            print(event.widget.winfo_parent())
+            print(event.widget.winfo_children())
             print("height", event.height, "width", event.width)
