@@ -1,4 +1,5 @@
 # Modifying heatmappage.py to add in a new button for spreadsheet transformations
+# Sydney : Modigying stuff to add a button to add a moon scrape page.
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from datetime import datetime
@@ -28,6 +29,7 @@ from joins_home import Joins_Home_Page
 from joins_light import Joins_Page_Light
 from joins_rubbing import Joins_Page_Rubbing
 from transformations import Transformations_Page
+from moon_scrape import Moon_Scrape_Page
 from categories import Categories_Page
 from joins_both import Joins_Page_Both
 import matplotlib.cm as cm
