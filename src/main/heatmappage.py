@@ -1,6 +1,7 @@
 from tkinter.ttk import Style
 
 from transformations import Transformations_Page
+from moon_scrape import Moon_Scrape_Page
 from categories import Categories_Page
 from joins import Joins_Page
 import matplotlib
@@ -665,6 +666,10 @@ class StartPage(tk.Frame):
         button6 = ttk.Button(self, text="Categorical Data",
                             command=lambda: controller.show_frame(Categories_Page))
         button6.grid(row=5, column=0, sticky=N)
+
+        button8 = ttk.Button(self, text="Scrape Moon Data",
+                            command=lambda: controller.show_frame(Moon_Scrape_Page))
+        button8.grid(row=0, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
                             command=lambda: controller.show_frame(Joins_Page))

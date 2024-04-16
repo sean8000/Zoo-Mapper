@@ -1,4 +1,5 @@
 # Modifying heatmappage.py to add in a new button for spreadsheet transformations
+# Sydney : Modigying stuff to add a button to add a moon scrape page.
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from datetime import datetime
@@ -25,6 +26,7 @@ from heatmappage import HeatMapPage
 from heatmappage import StartPage
 from kde import KDE_Page, KDE_Calculation_Page
 from transformations import Transformations_Page
+from moon_scrape import Moon_Scrape_Page
 from categories import Categories_Page
 from joins import Joins_Page
 import matplotlib.cm as cm
@@ -161,7 +163,7 @@ class ZooMapper(tk.Tk):
 
         #Took out """KDE_Page"""
         for F in (StartPage, PageOne, PageTwo, HeatMapPage, Transformations_Page, 
-                  Categories_Page, Joins_Page):
+                  Categories_Page, Joins_Page, Moon_Scrape_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame
