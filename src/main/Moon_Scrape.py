@@ -228,5 +228,5 @@ class Params_Page(tk.Toplevel):
 		print("Latitude", self.latitude.get())
 		print("Longitude", self.longitude.get())
 
-		excel_to_new_excel_Moon_Data(self.filename.get(), self.selected_sheet.get(), self.dateCol.get(),
+		excel_to_new_sheet_Moon_Data(self.filename.get(), self.selected_sheet.get(), self.dateCol.get(),
 							  		 self.commentCol.get(), self.latitude.get(), self.longitude.get())
