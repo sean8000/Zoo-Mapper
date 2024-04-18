@@ -338,7 +338,6 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
         
         # Grabbing both the moon Phase and Moon Illumination
         Phase_and_Illumination = soup.find('span', {"class":"moontext dusk-time"}).contents[0].split('/')   # Grabbing data from the html file (based on the class)
-        Phase_and_Illumination = Phase_and_Illumination.split('/')                                          # Splitting the data up based on format: Phase/Illumination
         Moon_Phase.append(Phase_and_Illumination[0])                                                        # inputting Phase into proper list
         Phase_and_Illumination[1] = Phase_and_Illumination[1].replace("%","")                               # Getting rid of % in result
         Disk_Illumination.append(Phase_and_Illumination[1])                                                 # inputting Illumination into proper list
@@ -520,7 +519,6 @@ def excel_to_new_sheet_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column_Name
         
         # Grabbing both the moon Phase and Moon Illumination
         Phase_and_Illumination = soup.find('span', {"class":"moontext dusk-time"}).contents[0].split('/')   # Grabbing data from the html file (based on the class)
-        Phase_and_Illumination = Phase_and_Illumination.split('/')                                          # Splitting the data up based on format: Phase/Illumination
         Moon_Phase.append(Phase_and_Illumination[0])                                                        # inputting Phase into proper list
         Phase_and_Illumination[1] = Phase_and_Illumination[1].replace("%","")                               # Getting rid of % in result
         Disk_Illumination.append(Phase_and_Illumination[1])                                                 # inputting Illumination into proper list
