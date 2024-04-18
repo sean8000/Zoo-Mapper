@@ -605,7 +605,7 @@ Longitude = "-84.389665108"
 FN = "GAQ CW11 dropped eggs log.docx"
 
 doc_to_excel_Moon_Data(FN, Latitude, Longitude)
-"""
+
 # Testing Excel to New Excel
 Latitude = "32.8678"
 Longitude = "-117.2496"
@@ -615,7 +615,7 @@ DC = 'EggDrop/TransferDate'
 CC = "Comments"
 
 excel_to_new_sheet_Moon_Data(FN, SN, DC, CC, Latitude, Longitude)
-"""
+
 # Testing Excel to New Sheet in Established Excel
 Latitude = "32.8678"
 Longitude = "-117.2496"
