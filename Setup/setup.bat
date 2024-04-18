@@ -5,7 +5,7 @@ pwd
 :: Install Python to system
 ::python-3.12.0-amd64.exe 
 
-pip install numpy matplotlib pandas pillow scipy tk tksheet xlrd rpy2 openpyxl
+pip install numpy matplotlib pandas pillow scipy tk tksheet xlrd rpy2 openpyxl selenium docx
 
 :: Install R to System
 ::R-4.3.1-win.exe

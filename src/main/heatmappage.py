@@ -648,9 +648,9 @@ class StartPage(tk.Frame):
                             command=lambda: controller.load_import(self))
         button2.grid(row = 2, column = 0)
 
-        button3 = ttk.Button(self, text="Graph",
-                             command=lambda: controller.show_frame(HeatMapPage))
-        button3.grid(row = 3, column = 0, sticky = N)
+        #button3 = ttk.Button(self, text="Graph",
+        #                     command=lambda: controller.show_frame(HeatMapPage))
+        #button3.grid(row = 3, column = 0, sticky = N)
 
         #Getting rid of KDE button4
         """
@@ -659,25 +659,24 @@ class StartPage(tk.Frame):
         button4.grid(row=4, column=0, sticky=N)
         """
 
+        # Adding Moon Scrape Button 4
+        button4 = ttk.Button(self, text="Scrape Moon Data",
+                            command=lambda: controller.show_frame(Moon_Scrape_Page))
+        button4.grid(row=4, column=0, sticky=N)
+
         button5 = ttk.Button(self, text="Data Inversion",
                             command=lambda: controller.show_frame(Transformations_Page))
-        button5.grid(row=4, column=0, sticky=N)
+        button5.grid(row=5, column=0, sticky=N)
 
         button6 = ttk.Button(self, text="Categorical Data",
                             command=lambda: controller.show_frame(Categories_Page))
-        button6.grid(row=5, column=0, sticky=N)
-
-        button8 = ttk.Button(self, text="Scrape Moon Data",
-                            command=lambda: controller.show_frame(Moon_Scrape_Page))
-        button8.grid(row=0, column=0, sticky=N)
+        button6.grid(row=6, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
                             command=lambda: controller.show_frame(Joins_Page))
-        button7.grid(row=6, column=0, sticky=N)
-        
-
-        #removing button4
-        buttons = {button1, button2, button3, button5, button6, button7}
+        button7.grid(row=3, column=0, sticky=N)
+        # temp got rid of button3
+        buttons = {button1, button2, button4, button5, button6, button7}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 
@@ -735,7 +734,7 @@ class StartPage(tk.Frame):
             #To have the image in vscode, use: 'src/main/resources/Logo.jpg' 
             #To have the image in the bat file, use: 'resources/Logo.jpg'
 
-            image = PIL.Image.open('src/main/resources/Logo.jpg')
+            image = PIL.Image.open('resources/Logo.jpg')
             
             image = ImageOps.expand(image,border=8,fill='black')
 

@@ -410,7 +410,7 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
 
     return
 
-def excel_to_prev_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column_Name:str, Comment_Column:str, latitiude:str, longitude:str):
+def excel_to_new_sheet_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column_Name:str, Comment_Column:str, latitiude:str, longitude:str):
     """
     In this function, we intake an excel file that may contain several sheets with lots if information. We are looking to 
     we want to grab dates and comments from the sheet name we are inputting, and then adding them into a new dataframe.
@@ -614,7 +614,7 @@ SN = "Sheet1"
 DC = 'EggDrop/TransferDate'
 CC = "Comments"
 
-excel_to_new_excel_Moon_Data(FN, SN, DC, CC, Latitude, Longitude)
+excel_to_new_sheet_Moon_Data(FN, SN, DC, CC, Latitude, Longitude)
 """
 # Testing Excel to New Sheet in Established Excel
 Latitude = "32.8678"
