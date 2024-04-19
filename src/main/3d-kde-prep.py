@@ -1,7 +1,7 @@
 from numpy import true_divide
 import pandas as pd
-import rpy2.robjects as robjects
-from rpy2.robjects import pandas2ri
+#import rpy2.robjects as robjects
+#from rpy2.robjects import pandas2ri
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import pandas as pd
@@ -88,8 +88,8 @@ def kde_prep():
     names = get_names(filename, filetype)
     params = get_params(names)
     
-    r = robjects.R
-    r['source']('3D_KDE_2021.R')
+    #r = robjects.R
+    #r['source']('3D_KDE_2021.R')
     
 
 if __name__ == '__main__':
