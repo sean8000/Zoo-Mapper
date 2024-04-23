@@ -53,10 +53,8 @@ class Doc_To_Excel_Moon_Scrape_Page(tk.Frame):
 		"""
 		# Setting our variables
 		self.filename = "None"           		# Variable will store the name of the file we want to oon scrape
-		self.file_extension = "None"	 		# Variable that will store the extension of the file (must be .xcel or .docx)
-		self.selected_sheet = "None"			# Will store the name of the sheet we are extracting data from (if .xcel)
-		self.sheet_page = "None"				# Stores the window where we will select the sheet name
-		self.sheet_options = []					# lists out the different sheets in the excel sheet passed in 
+		self.file_extension = "None"	 		# Variable that will store the extension of the file (must be .docx)
+		self.info_page = "None"
 		self.tmp = tk.StringVar()       		# setting self 
 
 		self.tmp.set("hello")
@@ -98,12 +96,12 @@ class Doc_To_Excel_Moon_Scrape_Page(tk.Frame):
 		validFile = False       # presuming that the file the user input is not valid, needs to be proven wrong
 
 		# grabbing the filename + path of the file that the user want to une the KBE on 
-		self.filename = askopenfilename(initialdir="", title="Select a File", filetypes=(("Excel Files", "*.xlsx*"), ("CSV Files", "*.csv*"), ("All Files", "*.*")))
+		self.filename = askopenfilename(initialdir="", title="Select a File", filetypes=(("Doc Files", "*.docx*"), ("All Files", "*.*")))
 
-		file_type = self.filename[self.filename.index('.'):] # grabbing the typr of the filw
+		file_type = self.filename[self.filename.index('.'):] # grabbing the type of the filw
 
 		# Checking to make sure the file is an .xslx 
-		if file_type == ".xlsx":
+		if file_type == ".docx":
 			validFile = True
 			file_extension = file_type
 
@@ -116,52 +114,15 @@ class Doc_To_Excel_Moon_Scrape_Page(tk.Frame):
 		"""
 		grabbing all of the information and parameters from the file we have selected
 		"""
-		sheet_page = Sheet_Select_Page(self.filename)
-		sheet_page.wait_window(sheet_page)
-		
-		
-class Sheet_Select_Page(tk.Toplevel):
-	def __init__(self, filename):
-		"""
-		We are grabbing the sheet name we will use to grab the rest of the data
-		"""
-		tk.Toplevel.__init__(self)  # constucting a main window of an application and making sure it is in the front of the screen
-		self.attributes('-topmost', 'true')
-
-		self.filename = tk.StringVar()      # filename
-		self.sheet_options = tk.StringVar()  
-		self.selected_sheet = tk.StringVar()
-
-		self.filename.set(filename)         # setting filename to the filename the user input
-		self.sheet_options = self.get_sheets(self.filename.get())
-		self.selected_sheet.set("Select Option")
-
-		sheetOptions_label = tk.Label(self, text='Select a Sheet to grab data from', bg='white')       # Header for selecting sheet we want data from	
-		sheetOptions_label.pack()                    # called with keyword-option/value pairs that control where the widget is to appear within its container
-
-		sheetOptions_dropdown = tk.OptionMenu(self, self.selected_sheet, *self.sheet_options)   # populating drop down with the names of the sheets
-		sheetOptions_dropdown.pack()
-
-		tmp_button = tk.Button(self, text="Run Join",
-								command=lambda: self.get_parameters_selecting())
-		tmp_button.pack()
-
-	def get_sheets(self, file):
-		sheet_options = list(pd.ExcelFile(file).sheet_names)
-		sheet_options.append("N/A")
-		return sheet_options
-	
-	def get_parameters_selecting(self):
-		print("in get params", self.selected_sheet.get(), "options", self.sheet_options)
-		options_box = Params_Page(self.filename.get(), self.selected_sheet.get())
-		options_box.wait_window(options_box)
-		
+		info_page = Params_Page(self.filename)
+		info_page.wait_window(info_page)
+			
 """
 This page allows users to select parameters for KDE calculations and
 run the KDE script
 """
 class Params_Page(tk.Toplevel):
-	def __init__(self, filename, selected_sheet):
+	def __init__(self, filename):
 		"""
 		Initializing everything we will use for the KDE calculatiosn
 		input:
@@ -173,30 +134,12 @@ class Params_Page(tk.Toplevel):
 
 		# We know what data we need for the calcularions so we are specifying the types they should all be
 		self.filename = tk.StringVar()      # filename
-		self.headers = tk.StringVar()
-		self.selected_sheet = tk.StringVar()   
-		self.dateCol = tk.StringVar()   
-		self.commentCol = tk.StringVar()
 		self.latitude= tk.StringVar()
 		self.longitude= tk.StringVar()
+		self.new_excel_name = tk.StringVar()
 
 
 		self.filename.set(filename)         		# setting filename to the filename the user input
-		self.selected_sheet.set(selected_sheet)		# setting sheet name to the sheet name from user input
-
-		self.headers = self.get_headers(self.filename.get(), self.selected_sheet.get())	# getting the list of headers options
-
-		# grab the rows with the dates
-		dateRow_label = tk.Label(self, text='Select Date Col', bg='white')     # Col that contains the dates
-		dateRow_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		dateRow_dropdown = tk.OptionMenu(self, self.dateCol, *self.headers)   # populating column with the all headers in the sheet
-		dateRow_dropdown.pack()
-
-		# Grab the row with comments 
-		commentCol_label = tk.Label(self, text='Select Comment Col', bg='white')  # Col that contains Data
-		commentCol_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		commentCol_dropdown = tk.OptionMenu(self, self.commentCol, *self.headers)  # populating column with the data stored in the  column
-		commentCol_dropdown.pack()
 
 		# Grab Latitude
 		latitude_label = tk.Label(self, text="Input Latitude", bg='white')
@@ -213,25 +156,24 @@ class Params_Page(tk.Toplevel):
 		longitude_entry = ttk.Entry(self, textvariable=self.longitude)
 		longitude_entry.pack(fill='x', expand=True)
 		longitude_entry.focus()
-  
+
+		# Grab new Excel File Name
+		new_excel_label = tk.Label(self, text="Input Name of New Excel Sheet", bg='white')
+		new_excel_label.pack()
+		
+		new_excel_entry = ttk.Entry(self, textvariable=self.new_excel_name)
+		new_excel_entry.pack(fill='x', expand=True)
+		longitude_entry.focus()
+
 		# Press to run the Scrape
 		tmp_button = tk.Button(self, text="Run Moon Scrape",
 								command=lambda: self.run_scrape())
 		tmp_button.pack()
-
-	def get_headers(self, file, sheet):
-		print("file", file, " sheet", sheet)
-		headers = list(pd.read_excel(file, sheet_name=sheet).columns)
-		headers.append("N/A")
-		return headers
 	
 	def run_scrape(self):
 		print("Filename", self.filename.get())
-		print("Sheet Name", self.selected_sheet.get())
-		print("Date Col", self.dateCol.get())
-		print("Comment Col", self.commentCol.get())
 		print("Latitude", self.latitude.get())
 		print("Longitude", self.longitude.get())
+		print("Longitude", self.new_excel_name.get())
 
-		excel_to_new_sheet_Moon_Data(self.filename.get(), self.selected_sheet.get(), self.dateCol.get(),
-							  		 self.commentCol.get(), self.latitude.get(), self.longitude.get())
+		doc_to_excel_Moon_Data(self.filename.get(), self.latitude.get(), self.longitude.get(), self.new_excel_name.get())

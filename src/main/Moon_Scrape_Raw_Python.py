@@ -37,7 +37,7 @@ def subtract_days(date, days_to_subtract):
 Numbers = '1234567890'
 Moon_Info_Options = []
 
-def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str):
+def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str, new_excel_name:str):
     """
     In this function, we intake a docx file that contains dates and descriptions we want to grab moon data for. In the
     first section, we seperate the dates and descriptions, format them, and input them in a dataframe. Then we activate
@@ -222,7 +222,7 @@ def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str):
                              "URL":URL})
     
     # created the moon scrape dataframe, now creating new Excel Sheet
-    df_final.to_excel("Moon_Scrape_" + File_Name[:-5] + ".xlsx")
+    df_final.to_excel(new_excel_name + ".xlsx")
 
     print("Scraping of Moon Data Complete!!!")
 
