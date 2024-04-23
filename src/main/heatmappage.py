@@ -1,9 +1,8 @@
 from tkinter.ttk import Style
 
 from transformations import Transformations_Page
-from moon_scrape_general import General_Moon_Scrape_Page
+from moon_scrape_home import Moon_Scrape_Home_Page
 from categories import Categories_Page
-#from joins_both import Joins_Page_Both
 from joins_home import Joins_Home_Page
 import matplotlib
 import pandas as pd
@@ -649,20 +648,13 @@ class StartPage(tk.Frame):
                             command=lambda: controller.load_import(self))
         button2.grid(row = 2, column = 0)
 
-        #button3 = ttk.Button(self, text="Graph",
-        #                     command=lambda: controller.show_frame(HeatMapPage))
-        #button3.grid(row = 3, column = 0, sticky = N)
-
-        #Getting rid of KDE button4
-        """
-        button4 = ttk.Button(self, text="KDE",
-                            command=lambda: controller.show_frame(KDE_Page))
-        button4.grid(row=4, column=0, sticky=N)
-        """
+        button3 = ttk.Button(self, text="Graph",
+                             command=lambda: controller.show_frame(HeatMapPage))
+        button3.grid(row = 3, column = 0, sticky = N)
 
         # Adding Moon Scrape Button 4
         button4 = ttk.Button(self, text="Scrape Moon Data",
-                            command=lambda: controller.show_frame(General_Moon_Scrape_Page))
+                            command=lambda: controller.show_frame(Moon_Scrape_Home_Page))
         button4.grid(row=4, column=0, sticky=N)
 
         button5 = ttk.Button(self, text="Data Inversion",
@@ -679,7 +671,7 @@ class StartPage(tk.Frame):
         
 
         #removing button4
-        buttons = {button1, button2, button3, button5, button6, button7}
+        buttons = {button1, button2, button3, button4, button5, button6, button7}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
 

@@ -24,7 +24,7 @@ import re
 import json
 import os
 
-import heatmappage
+import moon_scrape_home
 
 #import Negating_row
 
@@ -34,8 +34,11 @@ BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
-class Moon_Scrape_Page(tk.Frame):
+class Doc_To_Excel_Moon_Scrape_Page(tk.Frame):
 	def __init__(self, parent, controller):
+		def show_back():
+			from moon_scrape_home import Moon_Scrape_Home_Page
+			controller.show_frame(Moon_Scrape_Home_Page) 
 		"""
 		This function creates the landing page when users run Moon Scrapes.
 		We will be able to select the file we want to run, allow us to select the 
@@ -61,7 +64,7 @@ class Moon_Scrape_Page(tk.Frame):
 
 		# Creating the title of the web page
 		tk.Frame.__init__(self, parent)
-		label = tk.Label(self, text="Scraping Moon Data", font=MEDIUM_FONT)    		# Creates the title of the web pag
+		label = tk.Label(self, text="Scraping Moon Data From Doc to New Excel", font=MEDIUM_FONT)    		# Creates the title of the web pag
 		label.pack(pady=10, padx=10)                                                # Padding the name
 
 		# Creating Buttons for web page
@@ -76,8 +79,8 @@ class Moon_Scrape_Page(tk.Frame):
 		options_button.pack()
 
 		# Button that allows you to return the the homepage
-		back_button = ttk.Button(self, text="Back to Home",
-							command=lambda: controller.show_frame(heatmappage.StartPage))    # setting up the back to home button. goes back to start page for heat map
+		back_button = ttk.Button(self, text="Back to Moon Scrape Home",
+							command=lambda: show_back())    # setting up the back to home button. goes back to start page for heat map
 		back_button.pack()
 
 		
