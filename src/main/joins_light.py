@@ -168,9 +168,7 @@ class Params_Page(tk.Toplevel):
 		self.lightDateTime = tk.StringVar()   
 		self.rawSessionStartTime = tk.StringVar()   
 		self.dateTime = tk.StringVar() 
-		self.categ = tk.StringVar()
-		self.channelType = tk.StringVar()
-		self.channelDuration = tk.StringVar()
+		
 
 		self.filename.set(filename)         # setting filename to the filename the user input
 		self.filename2.set(filename2)
@@ -191,21 +189,6 @@ class Params_Page(tk.Toplevel):
 		dateTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
 		dateTime_dropdown = tk.OptionMenu(self, self.dateTime, *self.headers2)   # populating column with the data stored in the  column
 		dateTime_dropdown.pack()
-
-		categ_label = tk.Label(self, text='Behavior Desc. Column', bg='white')       # Name of the column you want to invert
-		categ_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		categ_dropdown = tk.OptionMenu(self, self.categ, *self.headers2)   # populating column with the data stored in the  column
-		categ_dropdown.pack()
-
-		channelType_label = tk.Label(self, text='Channel Type Column', bg='white')       # Name of the column you want to invert
-		channelType_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		channelType_dropdown = tk.OptionMenu(self, self.channelType, *self.headers2)   # populating column with the data stored in the  column
-		channelType_dropdown.pack()
-
-		channelDuration_label = tk.Label(self, text='Continuous Channel Duration Column', bg='white')       # Name of the column you want to invert
-		channelDuration_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		channelDuration_dropdown = tk.OptionMenu(self, self.channelDuration, *self.headers2)   # populating column with the data stored in the  column
-		channelDuration_dropdown.pack()
 
 		tmp_button = tk.Button(self, text="Run Join",
 								command=lambda: self.run_join())
@@ -263,42 +246,8 @@ class Params_Page(tk.Toplevel):
 
 		
 		#Initial join above #deals with times
-		#Second aspect of join below #deals with behaviors
-
-		for i, row in df_merged.iterrows():
-			#Remember to convert time to datetime
-			#Only works with continuous times
-			channelType = self.channelType.get()
-			channelDuration = self.channelDuration.get()
-			excelDateTime = self.dateTime.get()
-			if row[channelType] == 'Continuous':
-				print("continuous at: ", i)
-				#print("Keyval error at: ", i)
-				stored_value = int (row[channelDuration])
-				print("The stored value for the rubbing is: ", int(stored_value))
-				timestamp = pd.to_datetime(row[excelDateTime])
-				#print('before closest time')
-				return_value = self.find_closest_time(df_merged, timestamp)
-				#print("after closest time")
-				print("Closest time returned: ", stored_value)
-				if (return_value == -1):
-					#print("There was nothing closest to this time, -1 returned ")
-					messagebox.showinfo("Complete", "Data Joins failed due to range outside of a day")
-					raise Exception("There is a spreadsheet entry with a continuous behavior, and no rubbing behavior within that day")
-				else:
-					print("The returned date time of this current column is: ", df_merged[excelDateTime][i])
-					print("The returned time is: ", df_merged[excelDateTime][return_value])
-					if pd.isnull(df_merged.loc[return_value, channelDuration]):
-						df_merged.at[return_value, channelDuration] = stored_value
-					else:
-						print("Adding second value...")
-						df_merged.at[return_value, channelDuration] = str(df_merged.at[return_value, channelDuration]) + ", " + str(stored_value)
-
-		#For some reason not working in applied version, but did in hardcoded version
-		#df_merged = df_merged.drop('Unnamed: 0', axis=1)
-
 		
 		file_name = os.path.splitext(os.path.basename(self.filename2.get()))[0]
 		outdir = self.outputname + "/" + file_name + "_Data_Join.xlsx"
 		df_merged.to_excel(outdir)
-		messagebox.showinfo("Complete", "Data Joins complete")
+		messagebox.showinfo("Complete", "Data Light/Temp Join Complete")
