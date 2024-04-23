@@ -660,9 +660,11 @@ class StartPage(tk.Frame):
         button5 = ttk.Button(self, text="Data Inversion",
                             command=lambda: controller.show_frame(Transformations_Page))
         button5.grid(row=5, column=0, sticky=N)
+        button5.grid(row=5, column=0, sticky=N)
 
         button6 = ttk.Button(self, text="Categorical Data",
                             command=lambda: controller.show_frame(Categories_Page))
+        button6.grid(row=6, column=0, sticky=N)
         button6.grid(row=6, column=0, sticky=N)
 
         button7 = ttk.Button(self, text="Data Joins",
@@ -729,6 +731,7 @@ class StartPage(tk.Frame):
             #To have the image in vscode, use: 'src/main/resources/Logo.jpg' 
             #To have the image in the bat file, use: 'resources/Logo.jpg'
 
+            image = PIL.Image.open('resources/Logo.jpg')
             image = PIL.Image.open('resources/Logo.jpg')
             
             image = ImageOps.expand(image,border=8,fill='black')
