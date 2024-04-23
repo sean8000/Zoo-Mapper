@@ -24,9 +24,12 @@ from heatmap import InputError
 from heatmappage import HeatMapPage
 from heatmappage import StartPage
 from kde import KDE_Page, KDE_Calculation_Page
+from joins_home import Joins_Home_Page
+from joins_light import Joins_Page_Light
+from joins_rubbing import Joins_Page_Rubbing
 from transformations import Transformations_Page
 from categories import Categories_Page
-from joins import Joins_Page
+from joins_both import Joins_Page_Both
 import matplotlib.cm as cm
 import matplotlib.image as mpimg
 
@@ -161,7 +164,7 @@ class ZooMapper(tk.Tk):
 
         #Took out """KDE_Page"""
         for F in (StartPage, PageOne, PageTwo, HeatMapPage, Transformations_Page, 
-                  Categories_Page, Joins_Page):
+                  Categories_Page, Joins_Home_Page, Joins_Page_Both, Joins_Page_Light, Joins_Page_Rubbing):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame

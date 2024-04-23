@@ -22,7 +22,9 @@ import re
 import json
 import os
 
-
+from joins_both import Joins_Page_Both
+from joins_light import Joins_Page_Light
+from joins_rubbing import Joins_Page_Rubbing
 import heatmappage
 
 #import Negating_row
@@ -33,7 +35,7 @@ BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
-class Joins_Page(tk.Frame):
+class Joins_Home_Page(tk.Frame):
 	def __init__(self, parent, controller):
 		"""
 		This function creates the landing page when users decide to run Data Transformations.
@@ -47,12 +49,6 @@ class Joins_Page(tk.Frame):
 			The page will be up and ready for the user to interact with
 		"""
 		# Setting our variables
-		self.filename = "None"           # setting the file selection to NULL
-		self.filename2 = "None"
-		self.outputname = "None"          # Setting the outpot name of the file to NULL
-		self.tmp = tk.StringVar()       
-		self.tmp.set("hello")
-
 
 		# Creating the title of the web page
 		tk.Frame.__init__(self, parent)
@@ -60,18 +56,17 @@ class Joins_Page(tk.Frame):
 		label.pack(pady=10, padx=10)                                                # Padding the name
 
 		# Creating Buttons for web page
-		select_button = ttk.Button(self, text="Select Light/Temp File",
-										command=lambda: self.select_file())         # Select File button, look to function select_file # 76 to see what it does   
-		select_button.pack()        # called with keyword-option/value pairs that control where the widget is to appear within its container
-									#and how it is to behave when the main application window is resized
-		
-		select_button2 = ttk.Button(self, text="Select Data File",
-										command=lambda: self.select_file2())  
-		select_button2.pack()
+		joins_light = ttk.Button(self, text="Joins(Light/Temp)",
+							command=lambda: controller.show_frame(Joins_Page_Light))
+		joins_light.pack()
 
-		options_button = ttk.Button(self, text="Run Transformations",
-									command=lambda: self.get_parameters())          # Taken from kde, repurposed
-		options_button.pack()
+		joins_rubbing = ttk.Button(self, text="Joins(Rubbing)",
+							command=lambda: controller.show_frame(Joins_Page_Rubbing))
+		joins_rubbing.pack()
+
+		joins_both = ttk.Button(self, text="Joins(Both)",
+							command=lambda: controller.show_frame(Joins_Page_Both))
+		joins_both.pack()
 
 		back_button = ttk.Button(self, text="Back to Home",
 							command=lambda: controller.show_frame(heatmappage.StartPage))    # setting up the back to home button. goes back to start page for heat map
