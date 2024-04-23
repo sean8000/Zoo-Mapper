@@ -228,7 +228,7 @@ def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str, new_exce
 
     return
 
-def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str, Comment_Column:str, latitiude:str, longitude:str):
+def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str, Comment_Column:str, latitiude:str, longitude:str, new_excel_name:str):
     """
     In this function, we intake an excel file that may contain several sheets with lots if information. We are looking to 
     we want to grab dates and comments from the sheet name we are inputting, and then adding them into a new dataframe.
@@ -403,7 +403,7 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
                              "URL":URL})
     
     # created the moon scrape dataframe, now adding it to excel sheet
-    df_final.to_excel("Moon_Scrape_" + File_Name[:-5] + ".xlsx")
+    df_final.to_excel(new_excel_name + ".xlsx")
 
     print("Scraping of Moon Data Complete!!!")
 

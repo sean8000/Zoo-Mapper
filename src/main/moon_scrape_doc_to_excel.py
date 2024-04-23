@@ -174,6 +174,6 @@ class Params_Page(tk.Toplevel):
 		print("Filename", self.filename.get())
 		print("Latitude", self.latitude.get())
 		print("Longitude", self.longitude.get())
-		print("Longitude", self.new_excel_name.get())
+		print("New Excel Name", self.new_excel_name.get())
 
 		doc_to_excel_Moon_Data(self.filename.get(), self.latitude.get(), self.longitude.get(), self.new_excel_name.get())

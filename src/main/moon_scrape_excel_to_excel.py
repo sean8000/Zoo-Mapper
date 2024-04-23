@@ -24,7 +24,7 @@ import re
 import json
 import os
 
-import moon_scrape_home
+import heatmappage
 
 #import Negating_row
 
@@ -34,11 +34,8 @@ BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
-class Excel_To_Excel_Moon_Scrape_Page(tk.Frame):
+class Moon_Scrape_Page(tk.Frame):
 	def __init__(self, parent, controller):
-		def show_back():
-			from moon_scrape_home import Moon_Scrape_Home_Page
-			controller.show_frame(Moon_Scrape_Home_Page) 
 		"""
 		This function creates the landing page when users run Moon Scrapes.
 		We will be able to select the file we want to run, allow us to select the 
@@ -64,7 +61,7 @@ class Excel_To_Excel_Moon_Scrape_Page(tk.Frame):
 
 		# Creating the title of the web page
 		tk.Frame.__init__(self, parent)
-		label = tk.Label(self, text="Scraping Moon Data From Excel to New Excel", font=MEDIUM_FONT)    		# Creates the title of the web pag
+		label = tk.Label(self, text="Scraping Moon Data", font=MEDIUM_FONT)    		# Creates the title of the web pag
 		label.pack(pady=10, padx=10)                                                # Padding the name
 
 		# Creating Buttons for web page
@@ -79,9 +76,10 @@ class Excel_To_Excel_Moon_Scrape_Page(tk.Frame):
 		options_button.pack()
 
 		# Button that allows you to return the the homepage
-		back_button = ttk.Button(self, text="Back to Moon Scrape Home",
-							command=lambda: show_back())    # setting up the back to home button. goes back to start page for heat map
+		back_button = ttk.Button(self, text="Back to Home",
+							command=lambda: controller.show_frame(heatmappage.StartPage))    # setting up the back to home button. goes back to start page for heat map
 		back_button.pack()
+
 		
 
 	def select_file(self):
@@ -178,6 +176,7 @@ class Params_Page(tk.Toplevel):
 		self.commentCol = tk.StringVar()
 		self.latitude= tk.StringVar()
 		self.longitude= tk.StringVar()
+		self.new_excel_name = tk.StringVar()
 
 
 		self.filename.set(filename)         		# setting filename to the filename the user input
@@ -212,6 +211,14 @@ class Params_Page(tk.Toplevel):
 		longitude_entry = ttk.Entry(self, textvariable=self.longitude)
 		longitude_entry.pack(fill='x', expand=True)
 		longitude_entry.focus()
+		
+        # Grab new Excel File Name
+		new_excel_label = tk.Label(self, text="Input Name of New Excel Sheet", bg='white')
+		new_excel_label.pack()
+		
+		new_excel_entry = ttk.Entry(self, textvariable=self.new_excel_name)
+		new_excel_entry.pack(fill='x', expand=True)
+		longitude_entry.focus()
   
 		# Press to run the Scrape
 		tmp_button = tk.Button(self, text="Run Moon Scrape",
@@ -231,6 +238,8 @@ class Params_Page(tk.Toplevel):
 		print("Comment Col", self.commentCol.get())
 		print("Latitude", self.latitude.get())
 		print("Longitude", self.longitude.get())
+		print("New Excel Name", self.new_excel_name.get())
 
 		excel_to_new_sheet_Moon_Data(self.filename.get(), self.selected_sheet.get(), self.dateCol.get(),
-							  		 self.commentCol.get(), self.latitude.get(), self.longitude.get())
+							  		 self.commentCol.get(), self.latitude.get(), self.longitude.get(),
+									 self.new_excel_name.get())
