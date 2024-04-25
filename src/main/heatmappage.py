@@ -665,6 +665,7 @@ class StartPage(tk.Frame):
         button6.grid(row=6, column=0, sticky=N)
         
 
+
         # Buttons formatted correctly
         buttons = {button1, button2, button3, button4, button5, button6}
 
