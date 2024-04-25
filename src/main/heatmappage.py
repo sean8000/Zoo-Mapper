@@ -665,7 +665,7 @@ class StartPage(tk.Frame):
         button6.grid(row=6, column=0, sticky=N)
         
 
-        #removing button4
+        # Buttons formatted correctly
         buttons = {button1, button2, button3, button4, button5, button6}
 
         canvas = Canvas(self, width=800, height=507)  # width and height of the logo.jpg image
