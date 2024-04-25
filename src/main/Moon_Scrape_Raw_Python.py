@@ -154,10 +154,9 @@ def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str, new_exce
         
         # Grabbing both the moon Phase and Moon Illumination
         Phase_and_Illumination = soup.find('span', {"class":"moontext dusk-time"}).contents[0].split('/')   # Grabbing data from the html file (based on the class)
-        Phase_and_Illumination = Phase_and_Illumination.split('/')                                          # Splitting the data up based on format: Phase/Illumination
         Moon_Phase.append(Phase_and_Illumination[0])                                                        # inputting Phase into proper list
         Phase_and_Illumination[1] = Phase_and_Illumination[1].replace("%","")                               # Getting rid of % in result
-        Disk_Illumination.append(Phase_and_Illumination[1])                                                 # inputting Illumination into proper list
+        Disk_Illumination.append(Phase_and_Illumination[1])                                                 # inputting Illumination into proper list                                           # inputting Illumination into proper list
         
         # Calculations
 
@@ -222,7 +221,9 @@ def doc_to_excel_Moon_Data(File_Name:str, latitiude:str, longitude:str, new_exce
                              "URL":URL})
     
     # created the moon scrape dataframe, now creating new Excel Sheet
-    df_final.to_excel(new_excel_name + ".xlsx")
+    filename = File_Name.rsplit("/", 1)
+    print(filename[0] + new_excel_name + ".xlsx")
+    df_final.to_excel(filename[0]  + "/" + new_excel_name + ".xlsx")
 
     print("Scraping of Moon Data Complete!!!")
 
@@ -253,13 +254,15 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
 
     for ind in df.index:                            # going through our document and grabbing each line
         date = str(df[Date_Column][ind])            # grabbing the dates, placing in variable
-        if (date=="" or date[0] not in Numbers):    # we got all the dates, the rest of the cols don't matter
-            break
-        Dates.append(date)
-        
         desc = df[Comment_Column][ind]
-        
-        Descriptions.append(desc)
+
+        if (date=="" and desc==""):    # we got all the dates, the rest of the cols don't matter
+            break
+        if (date== ""):
+            pass
+        else:
+            Dates.append(date)
+            Descriptions.append(desc)
 
     # creating a dataframe 
     df = pd.DataFrame({'Descriptions':Descriptions, "Dates":Dates})
@@ -295,12 +298,14 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
 
     # going though each row of the inputted excel sheet
     for ind in df.index:
+        print("Current Date", df['Dates'][ind] )
         year = df['Dates'][ind][:4]                 # storing year
         month = df['Dates'][ind][5:7]               # storing month
         day = df['Dates'][ind][8:10]                # storing day
         data_time = df['Dates'][ind][11:16]         # storing time hh:mm
 
         url = "https://www.mooncalc.org/#/" + latitiude + "," + longitude + ",3/" + year + "." + month + "." + day + "/" + data_time +"/1/3"
+        print("URL: ", url)
         URL.append(url)                             # Adding constructed URL to list 
         
         driver.get(url)                             # searching using our constructed URL
@@ -433,14 +438,15 @@ def excel_to_new_sheet_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column_Name
     Dates = []
     Descriptions = []
 
-    for ind in df.index:                            # going through our excel and grabbin data from each row
-        date = str(df[Date_Column_Name][ind])       # grabbing the dates, placing in variable
-        if (date=="" or date[0] not in Numbers):    # we got all the dates, the rest of the cols don't matter
-            break
-        Dates.append(date)
-        
+    for ind in df.index:                            # going through our document and grabbing each line
+        date = str(df[Date_Column_Name][ind])            # grabbing the dates, placing in variable
         desc = df[Comment_Column][ind]
-        
+
+        if (date=="" and desc==""):    # we got all the dates, the rest of the cols don't matter
+            break
+        if (date== ""):
+            pass
+        Dates.append(date)
         Descriptions.append(desc)
 
     df = pd.DataFrame({'Descriptions':Descriptions, "Dates":Dates})

@@ -34,7 +34,7 @@ BUTTON_FONT = ('Calibiri', 14, 'bold')
 BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
-class Moon_Scrape_Page(tk.Frame):
+class Excel_To_Sheet_Moon_Scrape_Page(tk.Frame):
 	def __init__(self, parent, controller):
 		"""
 		This function creates the landing page when users run Moon Scrapes.
