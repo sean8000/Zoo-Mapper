@@ -256,9 +256,12 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
         date = str(df[Date_Column][ind])            # grabbing the dates, placing in variable
         desc = df[Comment_Column][ind]
 
+        print("Date", date)
+        print("Desc", desc)
+
         if (date=="" and desc==""):    # we got all the dates, the rest of the cols don't matter
             break
-        if (date== ""):
+        if (date== "NaT"):
             pass
         else:
             Dates.append(date)
@@ -408,7 +411,10 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
                              "URL":URL})
     
     # created the moon scrape dataframe, now adding it to excel sheet
-    df_final.to_excel(new_excel_name + ".xlsx")
+    filename = File_Name.rsplit("/", 1)
+    print(filename[0] + new_excel_name + ".xlsx")
+    df_final.to_excel(filename[0]  + "/" + new_excel_name + ".xlsx")
+
 
     print("Scraping of Moon Data Complete!!!")
 
