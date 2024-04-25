@@ -256,9 +256,6 @@ def excel_to_new_excel_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column:str,
         date = str(df[Date_Column][ind])            # grabbing the dates, placing in variable
         desc = df[Comment_Column][ind]
 
-        print("Date", date)
-        print("Desc", desc)
-
         if (date=="" and desc==""):    # we got all the dates, the rest of the cols don't matter
             break
         if (date== "NaT"):
@@ -450,10 +447,11 @@ def excel_to_new_sheet_Moon_Data(File_Name:str, Sheet_Name:str, Date_Column_Name
 
         if (date=="" and desc==""):    # we got all the dates, the rest of the cols don't matter
             break
-        if (date== ""):
+        if (date== "NaT"): # this means the cell was empty 
             pass
-        Dates.append(date)
-        Descriptions.append(desc)
+        else:
+            Dates.append(date)
+            Descriptions.append(desc)
 
     df = pd.DataFrame({'Descriptions':Descriptions, "Dates":Dates})
     
