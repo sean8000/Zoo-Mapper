@@ -63,7 +63,7 @@ class Categories_Page(tk.Frame):
         select_button.pack()        # called with keyword-option/value pairs that control where the widget is to appear within its container
                                     #and how it is to behave when the main application window is resized
         options_button = ttk.Button(self, text="Run Transformations",
-                                    command=lambda: self.get_parameters())          # Taken from kde, repurposed
+                                    command=lambda: self.get_parameters())          # Creates the options pop up box
         options_button.pack()
 
         back_button = ttk.Button(self, text="Back to Home",
@@ -127,7 +127,7 @@ class Params_Page(tk.Toplevel):
         # We know what data we need for the calcularions so we are specifying the types they should all be
         self.filename = tk.StringVar()      # filename
         self.outputname = tk.StringVar()    # output directory
-        self.categ = tk.StringVar()    # the column you want to invert
+        self.categ = tk.StringVar()    # the column you want turn into a number
 
         self.filename.set(filename)         # setting filename to the filename the user input
 
