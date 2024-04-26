@@ -126,7 +126,7 @@ class Params_Page(tk.Toplevel):
 
         # We know what data we need for the calcularions so we are specifying the types they should all be
         self.filename = tk.StringVar()      # filename
-        self.outputname = tk.StringVar()    # unsure
+        self.outputname = tk.StringVar()    # output directory
         self.categ = tk.StringVar()    # the column you want to invert
 
         self.filename.set(filename)         # setting filename to the filename the user input
