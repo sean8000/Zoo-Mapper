@@ -34,6 +34,10 @@ BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
 class Joins_Page_Light(tk.Frame):
+	'''
+	Refer to joins_both.py for general documentation, this file is just a portion of joins_both
+	It only does the light/temp portion of the join (1st half)
+	'''
 	def __init__(self, parent, controller):
 		def show_back():
 			from joins_home import Joins_Home_Page
