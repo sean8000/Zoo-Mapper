@@ -35,6 +35,10 @@ BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
 class Joins_Page_Rubbing(tk.Frame):
+	'''
+	Refer to joins_both.py for general documentation, this file is just a portion of joins_both
+	It only does the rubbing portion of the join (second half)
+	'''
 	def __init__(self, parent, controller):
 		#Entire function used to avoid circular import
 		def show_back():
@@ -172,7 +176,7 @@ class Params_Page(tk.Toplevel):
 		dateTime_dropdown = tk.OptionMenu(self, self.dateTime, *self.headers2)   # populating column with the data stored in the  column
 		dateTime_dropdown.pack()
 
-		categ_label = tk.Label(self, text='All Occurrence Column', bg='white')       # Name of the column you want to invert
+		categ_label = tk.Label(self, text='All Occurrence Value Column', bg='white')       # Name of the column you want to invert
 		categ_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
 		categ_dropdown = tk.OptionMenu(self, self.categ, *self.headers2)   # populating column with the data stored in the  column
 		categ_dropdown.pack()

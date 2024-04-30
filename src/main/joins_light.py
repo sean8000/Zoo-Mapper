@@ -34,6 +34,10 @@ BACKGROUND_COLOR = '#407297'
 LIGHT_BLUE = '#d4e1fa'
 
 class Joins_Page_Light(tk.Frame):
+	'''
+	Refer to joins_both.py for general documentation, this file is just a portion of joins_both
+	It only does the light/temp portion of the join (1st half)
+	'''
 	def __init__(self, parent, controller):
 		def show_back():
 			from joins_home import Joins_Home_Page
@@ -166,8 +170,7 @@ class Params_Page(tk.Toplevel):
 		self.filename2 = tk.StringVar()  
 		self.outputname = tk.StringVar()    # unsure
 		self.lightDateTime = tk.StringVar()   
-		self.rawSessionStartTime = tk.StringVar()   
-		self.dateTime = tk.StringVar() 
+		self.rawDateTime = tk.StringVar() 
 		
 
 		self.filename.set(filename)         # setting filename to the filename the user input
@@ -180,15 +183,10 @@ class Params_Page(tk.Toplevel):
 		lightDateTime_dropdown = tk.OptionMenu(self, self.lightDateTime, *self.headers)   # populating column with the data stored in the  column
 		lightDateTime_dropdown.pack()
 	   
-		rawSessionStartTime_label = tk.Label(self, text='Data Session Start Time Column', bg='white')       # Name of the column you want to invert
-		rawSessionStartTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		rawSessionStartTime_dropdown = tk.OptionMenu(self, self.rawSessionStartTime, *self.headers2)   # populating column with the data stored in the  column
-		rawSessionStartTime_dropdown.pack()
-
-		dateTime_label = tk.Label(self, text='Data Date Time Column', bg='white')       # Name of the column you want to invert
-		dateTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
-		dateTime_dropdown = tk.OptionMenu(self, self.dateTime, *self.headers2)   # populating column with the data stored in the  column
-		dateTime_dropdown.pack()
+		rawDateTime_label = tk.Label(self, text='Data Date Time Column', bg='white')       # Name of the column you want to invert
+		rawDateTime_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
+		rawDateTime_dropdown = tk.OptionMenu(self, self.rawDateTime, *self.headers2)   # populating column with the data stored in the  column
+		rawDateTime_dropdown.pack()
 
 		tmp_button = tk.Button(self, text="Run Join",
 								command=lambda: self.run_join())
@@ -210,7 +208,7 @@ class Params_Page(tk.Toplevel):
 	def find_closest_time(self, df, datetime):
 
 		#This is the difference at the start, which is datetime - 1 day
-		excelDateTime = self.dateTime.get()
+		excelDateTime = self.rawDateTime.get()
 		behavior = self.categ.get()
 		time_difference = (datetime - (datetime - pd.DateOffset(1))).total_seconds()
 		returnIndex = -1
@@ -227,21 +225,20 @@ class Params_Page(tk.Toplevel):
 		
 	def run_join(self):
 		self.select_output()
-		rawTime = self.rawSessionStartTime.get()
+		rawTime = self.rawDateTime.get()
 		lightTime = self.lightDateTime.get()
 		df_raw = pd.read_excel(self.filename2.get(), sheet_name=0)
 		df_light = pd.read_excel(self.filename.get(), sheet_name=0)
 
-		df_light= df_light.rename(columns={lightTime: 'Session Start Time_dup'})
+		df_light= df_light.rename(columns={lightTime: 'rawDateTimeDup'})
 
 		df_raw[rawTime] = pd.to_datetime(df_raw[rawTime])
-		df_light['Session Start Time_dup'] = pd.to_datetime(df_light['Session Start Time_dup'])
+		df_light['rawDateTimeDup'] = pd.to_datetime(df_light['rawDateTimeDup'])
+		df_raw['roundedDateTime'] = df_raw[rawTime].dt.round('15min')
+		df_light['roundedDateTime'] = df_light['rawDateTimeDup'].dt.round('15min')
 
-		df_raw['Rounded_Session_Start_time'] = df_raw[rawTime].dt.round('15min')
-		df_light['Rounded_Session_Start_time'] = df_light['Session Start Time_dup'].dt.round('15min')
-
-		df_merged = pd.merge(df_raw, df_light, on='Rounded_Session_Start_time', how="left")  
-		df_merged = df_merged.drop('Session Start Time_dup', axis=1)
+		df_merged = pd.merge(df_raw, df_light, on='roundedDateTime', how="left")  
+		df_merged = df_merged.drop('rawDateTimeDup', axis=1)
 		df_merged= df_merged.rename(columns={'#': 'Matching Row'})
 
 		
