@@ -87,7 +87,7 @@ class ZooMapper(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        # tk.Tk.iconbitmap(self, default="resources/clienticon.ico")
+        # tk.Tk.iconbitmap(self, default="resources/clienticon.ico") 
 
         tk.Tk.wm_title(self, 'Zoo Mapper')
         tk.Tk.wm_geometry(self, '1440x810')
