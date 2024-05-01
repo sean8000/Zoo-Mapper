@@ -54,7 +54,7 @@ class Categories_Page(tk.Frame):
 
         # Creating the title of the web page
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Data Transformations", font=MEDIUM_FONT)    # Creates the title of the web page
+        label = tk.Label(self, text="Numbered Behaviors", font=MEDIUM_FONT)    # Creates the title of the web page
         label.pack(pady=10, padx=10)                                                # Padding the name
 
         # Creating Buttons for web page, Select file, run button, back to home button
@@ -62,7 +62,7 @@ class Categories_Page(tk.Frame):
                                         command=lambda: self.select_file())         # Select File button, look to function select_file # 76 to see what it does   
         select_button.pack()        # called with keyword-option/value pairs that control where the widget is to appear within its container
                                     #and how it is to behave when the main application window is resized
-        options_button = ttk.Button(self, text="Run Transformations",
+        options_button = ttk.Button(self, text="Run Numbered Behaviors",
                                     command=lambda: self.get_parameters())          # Creates the options pop up box
         options_button.pack()
 
@@ -134,13 +134,13 @@ class Params_Page(tk.Toplevel):
         self.headers = self.get_headers(self.filename.get())            #grabbing the names of the headers from the file we input
 
         #Setting up the dropdown to pick the category columns from all cols in spreadsheet. 
-        categ_label = tk.Label(self, text='Behavior Desc. Column', bg='white')       # Name of the column you want to invert
+        categ_label = tk.Label(self, text='All Occurrence Value Column', bg='white')       # Name of the column you want to invert
         categ_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
         categ_dropdown = tk.OptionMenu(self, self.categ, *self.headers)   # populating column with the data stored in the  column
         categ_dropdown.pack()
        
        #Run button, calls run.transformations function
-        tmp_button = tk.Button(self, text="Run Transformations",
+        tmp_button = tk.Button(self, text="Run Numbered Behaviors",
                                 command=lambda: self.run_transformations())
         tmp_button.pack()
 

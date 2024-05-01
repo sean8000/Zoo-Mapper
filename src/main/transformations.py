@@ -55,7 +55,7 @@ class Transformations_Page(tk.Frame):
 
         # Creating the title of the web page
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Data Transformations", font=MEDIUM_FONT)    # Creates the title of the web page
+        label = tk.Label(self, text="Data Negation", font=MEDIUM_FONT)    # Creates the title of the web page
         label.pack(pady=10, padx=10)                                                # Padding the name
 
         # Creating Buttons for web page, Select file, run, back to home
@@ -65,7 +65,7 @@ class Transformations_Page(tk.Frame):
                                     #and how it is to behave when the main application window is resized
         
         #Button that brings up the pop up window for running the transformations
-        options_button = ttk.Button(self, text="Run Transformations",               
+        options_button = ttk.Button(self, text="Run Negation",               
                                     command=lambda: self.get_parameters())          # Taken from kde, repurposed
         options_button.pack()
 
@@ -141,7 +141,7 @@ class Params_Page(tk.Toplevel):
         invert_col_dropdown.pack()
        
         #Button that actually runs the transformations, inside the pop up window
-        tmp_button = tk.Button(self, text="Run Transformations",
+        tmp_button = tk.Button(self, text="Run Negation",
                                 command=lambda: self.run_transformations())
         tmp_button.pack()
 
