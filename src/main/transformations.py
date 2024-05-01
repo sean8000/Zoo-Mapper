@@ -167,7 +167,8 @@ class Params_Page(tk.Toplevel):
         df = pd.read_excel(self.filename.get(), sheet_name=0) #read the first excel sheet
 
 
-        df[self.invert_col.get()] = -1 * df[self.invert_col.get()] #Get the column, mutate it to be the negated version
+
+        df["Neg-" + self.invert_col.get()] = -1 * df[self.invert_col.get()] #Get the column, mutate it to be the negated version
 
         #Create the file name, write it to the output directory, show the complete message
         file_name = os.path.splitext(os.path.basename(self.filename.get()))[0]
