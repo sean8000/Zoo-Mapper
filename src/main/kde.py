@@ -22,7 +22,7 @@ import json
 import os
 
 import os
-os.environ['R_HOME'] = 'C:\Program Files\R\R-4.3.1'
+#os.environ['R_HOME'] = 'C:\Program Files\R\R-4.3.1'
 
 import heatmappage
 # python -c "import os, sys; print(os.path.dirname(sys.executable))" prints your python path
