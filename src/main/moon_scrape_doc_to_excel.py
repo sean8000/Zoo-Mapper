@@ -7,9 +7,9 @@ from tokenize import Double
 from numpy import double, true_divide
 import pandas as pd
 import numpy as np
-import rpy2.robjects as robjects
-from rpy2.robjects import NULL, pandas2ri
-from rpy2.robjects import r
+#import rpy2.robjects as robjects
+#from rpy2.robjects import NULL, pandas2ri
+#from rpy2.robjects import r
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
