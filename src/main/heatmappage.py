@@ -1,8 +1,9 @@
 from tkinter.ttk import Style
 
 from transformations import Transformations_Page
+from moon_scrape_home import Moon_Scrape_Home_Page
 from categories import Categories_Page
-from joins import Joins_Page
+from joins_home import Joins_Home_Page
 import matplotlib
 import pandas as pd
 import numpy as np
@@ -43,7 +44,6 @@ import csv
 from tkmacosx import Button
 from kde import KDE_Page
 from transformations import Transformations_Page
-from joins import Joins_Page
 
 LARGE_FONT = ("Bell Gothic Std Black", 40, 'bold')
 MEDIUM_FONT = ("Bell Gothic Std Black", 25, 'bold')
@@ -651,14 +651,14 @@ class StartPage(tk.Frame):
                             command=lambda: controller.get_spreadsheet(), borderless=1)
             button2 = Button(self, text="Load Import", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.load_import(self), borderless=1)
-            button3 = Button(self, text="Graph", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
-                            command=lambda: controller.show_frame(HeatMapPage), borderless=1)
+            button3 = Button(self, text="Scrape Moon Data", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.show_frame(Moon_Scrape_Home_Page), borderless=1)
             button4 = Button(self, text="Data Inversion", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.show_frame(Transformations_Page), borderless=1)
             button5 = Button(self, text="Categorical Data", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.show_frame(Categories_Page), borderless=1)
             button6 = Button(self, text="Data Joins", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
-                            command=lambda: controller.show_frame(Joins_Page), borderless=1)
+                            command=lambda: controller.show_frame(Joins_Home_Page), borderless=1)
             img = PIL.Image.open('resources/Logo.jpg')
             
         else:
@@ -667,14 +667,14 @@ class StartPage(tk.Frame):
                                 command=lambda: controller.get_spreadsheet())
             button2 = ttk.Button(self, text="Load Import", style="TButton",
                                 command=lambda: controller.load_import(self))
-            button3 = ttk.Button(self, text="Graph", style="TButton",
-                                    command=lambda: controller.show_frame(HeatMapPage))
+            button3 = ttk.Button(self, text="Scrape Moon Data", style="TButton",
+                            command=lambda: controller.show_frame(Moon_Scrape_Home_Page))
             button4 = ttk.Button(self, text="Data Inversion", style="TButton",
                                 command=lambda: controller.show_frame(Transformations_Page))
             button5 = ttk.Button(self, text="Categorical Data", style="TButton",
                                 command=lambda: controller.show_frame(Categories_Page))
             button6 = ttk.Button(self, text="Data Joins", style="TButton",
-                                command=lambda: controller.show_frame(Joins_Page))
+                                command=lambda: controller.show_frame(Joins_Home_Page))
             
             # img = PIL.Image.open('resources/Logo.jpg') #for mac used for testing purposes.
             img = PIL.Image.open('src/main/resources/Logo.jpg')
@@ -728,12 +728,18 @@ class StartPage(tk.Frame):
         #     canvas.bind(
         # '<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
+        """
+        This Method gets called when the user changes the scale of the zoo mapper app. 
+        If the app is minamized too much it will remove the image and center the rest of the buttons.
+
+        Arguments:
+        (event) - The event that contains the data of the zoo mapper app such as the page hight and width.
+        """
         def changeScale(event):
             
             pageWidth = event.width
             pageHeight = event.height
 
-            #Label Position on grid
             #Original values going down are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
             ZooMapperLabel.config(wraplength = math.floor(pageWidth/2))
             ZooMapperLabel.grid(row = 0, column = 0, sticky = NSEW)
@@ -762,13 +768,10 @@ class StartPage(tk.Frame):
             #To have the image in vscode, use: 'src/main/resources/Logo.jpg' 
             #To have the image in the bat file, use: 'resources/Logo.jpg'
 
-            # image = PIL.Image.open('src/main/resources/Logo.jpg')
-            
+            # image = PIL.Image.open('resources/Logo.jpg') 
             # image = ImageOps.expand(image,border=8,fill='black')
-                
-            # img = PIL.Image.open('resources/Logo.jpg')
-            # img = ImageOps.expand(img,border=8,fill='black')
 
+            #Mac image path
             img = PIL.Image.open('resources/Logo.jpg')
             img = ImageTk.PhotoImage(img)
 
@@ -776,11 +779,6 @@ class StartPage(tk.Frame):
             enclosure_image.image = img #NEEDED because python forgets the image referance
 
             if(pageHeight < 507 or pageWidth < 800):
-                # print("______HI")
-                # print(event.widget.winfo_name())
-                # print(event.widget.winfo_parent())
-                # print(event.widget.winfo_children())
-                # print("height", event.height, "width", event.width)
 
                 enclosure_image.grid_forget()
                 self.grid_columnconfigure(0, minsize = pageWidth)
@@ -820,39 +818,14 @@ class StartPage(tk.Frame):
                 imgW, imgH = 800, 507
                 #img = img.resize((imgW, imgH))
                 enclosure_image.config(width = imgW, height = imgH)
-            """
+            
             
 
-            # idk
-            # enclosure_image.background = img
-            # bg = enclosure_image.create_img(0, 0, anchor=tk.NW, image=img
+            enclosure_image.background = img
+            bg = enclosure_image.create_img(0, 0, anchor=tk.NW, image=img
+            """
 
-        parent.bind( "<Configure>", changeScale)#mac only?
-        # parent.bind('Configure', changeScale)
-
-
-
-    def resize(event):
-        pageWidth = event.width
-        pageHeight = event.height
-
-        if((pageHeight < 507 or pageWidth < 800)
-            and event.widget.winfo_name() == "!startpage"):
-
-            # img = PIL.Image.open('resources/Logo.jpg')
-            # img = ImageOps.expand(img,border=8,fill='black')
-
-            # enclosure_image = Label(event.width, image=img)
-            # enclosure_image.image = img #NEEDED because python forgets the image referance
-
-
-            # enclosure_image.grid_forget()
-            # self.grid_columnconfigure(0, minsize = pageWidth)
-            # self.grid_rowconfigure(0, pad = 0)
-            # label.config(wraplength = math.floor(pageWidth*(4/5)))
-
-            print("_______")
-            print(event.widget.winfo_name())
-            print(event.widget.winfo_parent())
-            print(event.widget.winfo_children())
-            print("height", event.height, "width", event.width)
+        if(OS_platform == "Darwin"):
+            parent.bind( "<Configure>", changeScale)
+        else:
+            parent.bind('Configure', changeScale)

@@ -1,4 +1,6 @@
 # Modifying heatmappage.py to add in a new button for spreadsheet transformations
+# Sydney : Modigying stuff to add a button to add a moon scrape page.
+# Sydney : Modigying stuff to add a button to add a moon scrape page.
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from datetime import datetime
@@ -24,9 +26,16 @@ from heatmap import InputError
 from heatmappage import HeatMapPage
 from heatmappage import StartPage
 from kde import KDE_Page, KDE_Calculation_Page
+from joins_home import Joins_Home_Page
+from joins_light import Joins_Page_Light
+from joins_rubbing import Joins_Page_Rubbing
 from transformations import Transformations_Page
+from moon_scrape_home import Moon_Scrape_Home_Page
+from moon_scrape_doc_to_excel import Doc_To_Excel_Moon_Scrape_Page
+from moon_scrape_excel_to_excel import Excel_To_Excel_Moon_Scrape_Page
+from moon_scrape_excel_to_sheet import Excel_To_Sheet_Moon_Scrape_Page
 from categories import Categories_Page
-from joins import Joins_Page
+from joins_both import Joins_Page_Both
 import matplotlib.cm as cm
 import matplotlib.image as mpimg
 
@@ -78,7 +87,7 @@ class ZooMapper(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        # tk.Tk.iconbitmap(self, default="resources/clienticon.ico")
+        # tk.Tk.iconbitmap(self, default="resources/clienticon.ico") 
 
         tk.Tk.wm_title(self, 'Zoo Mapper')
         tk.Tk.wm_geometry(self, '1440x810')
@@ -161,7 +170,8 @@ class ZooMapper(tk.Tk):
 
         #Took out """KDE_Page"""
         for F in (StartPage, PageOne, PageTwo, HeatMapPage, Transformations_Page, 
-                  Categories_Page, Joins_Page, KDE_Page): #front page
+                  Categories_Page, Joins_Home_Page, Joins_Page_Both, Joins_Page_Light, Joins_Page_Rubbing, 
+                  Moon_Scrape_Home_Page, Excel_To_Excel_Moon_Scrape_Page, Excel_To_Sheet_Moon_Scrape_Page, Doc_To_Excel_Moon_Scrape_Page):
             frame = F(container, self)
             frame.config(bg=BACKGROUND_COLOR)
             self.frames[F] = frame
@@ -1571,5 +1581,4 @@ class SheetView(tk.Tk, tk.Toplevel):
 
 
 app = ZooMapper()
-#app.bind("<Configure>", StartPage.resize)
 app.mainloop()

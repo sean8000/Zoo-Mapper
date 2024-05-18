@@ -6,9 +6,9 @@ from tkinter import filedialog
 from tokenize import Double
 from numpy import double, true_divide
 import pandas as pd
-import rpy2.robjects as robjects
-from rpy2.robjects import NULL, pandas2ri
-from rpy2.robjects import r
+#import rpy2.robjects as robjects
+#from rpy2.robjects import NULL, pandas2ri
+#from rpy2.robjects import r
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
@@ -47,23 +47,25 @@ class Transformations_Page(tk.Frame):
             The page will be up and ready for the user to interact with
         """
         # Setting our variables
-        self.filename = "None"           # setting the file selection to NULL
-        self.outputname = "None"          # Setting the outpot name of the file to NULL
+        self.filename = "None"           # setting the file selection to None
+        self.outputname = "None"          # Setting the outpot name of the file to None
         self.tmp = tk.StringVar()       
         self.tmp.set("hello")
 
 
         # Creating the title of the web page
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Data Transformations", font=MEDIUM_FONT)    # Creates the title of the web page
+        label = tk.Label(self, text="Data Negation", font=MEDIUM_FONT)    # Creates the title of the web page
         label.pack(pady=10, padx=10)                                                # Padding the name
 
-        # Creating Buttons for web page
+        # Creating Buttons for web page, Select file, run, back to home
         select_button = ttk.Button(self, text="Select File",
                                         command=lambda: self.select_file())         # Select File button, look to function select_file # 76 to see what it does   
         select_button.pack()        # called with keyword-option/value pairs that control where the widget is to appear within its container
                                     #and how it is to behave when the main application window is resized
-        options_button = ttk.Button(self, text="Run Transformations",
+        
+        #Button that brings up the pop up window for running the transformations
+        options_button = ttk.Button(self, text="Run Negation",               
                                     command=lambda: self.get_parameters())          # Taken from kde, repurposed
         options_button.pack()
 
@@ -125,23 +127,28 @@ class Params_Page(tk.Toplevel):
 
         # We know what data we need for the calcularions so we are specifying the types they should all be
         self.filename = tk.StringVar()      # filename
-        self.outputname = tk.StringVar()    # unsure
+        self.outputname = tk.StringVar()    # output directory
         self.invert_col = tk.StringVar()    # the column you want to invert
 
         self.filename.set(filename)         # setting filename to the filename the user input
 
         self.headers = self.get_headers(self.filename.get())            #grabbing the names of the headers from the file we input
-    
+
+        #Creates the dropdown for the invert_col variable, choosing from list of excel columns
         invert_col_label = tk.Label(self, text='Invert Column', bg='white')       # Name of the column you want to invert
         invert_col_label.pack()                                                   # called with keyword-option/value pairs that control where the widget is to appear within its container
         invert_col_dropdown = tk.OptionMenu(self, self.invert_col, *self.headers)   # populating column with the data stored in the  column
         invert_col_dropdown.pack()
        
-        tmp_button = tk.Button(self, text="Run Transformations",
+        #Button that actually runs the transformations, inside the pop up window
+        tmp_button = tk.Button(self, text="Run Negation",
                                 command=lambda: self.run_transformations())
         tmp_button.pack()
 
     def get_headers(self, file):
+        '''
+        Gets the column headers in the excel file
+        '''
         headers = list(pd.read_excel(file).columns)
         headers.append("N/A")
         return headers
@@ -155,13 +162,15 @@ class Params_Page(tk.Toplevel):
         self.outputname = filedialog.askdirectory(title = "Select a Directory for Output")
 
     def run_transformations(self):
-        self.select_output()
+        self.select_output()            #Always call at the beginning, when the user hits run it will wait for them to select an output directory
 
-        df = pd.read_excel(self.filename.get(), sheet_name=0)
+        df = pd.read_excel(self.filename.get(), sheet_name=0) #read the first excel sheet
 
 
-        df[self.invert_col.get()] = -1 * df[self.invert_col.get()]
 
+        df["Neg-" + self.invert_col.get()] = -1 * df[self.invert_col.get()] #Get the column, mutate it to be the negated version
+
+        #Create the file name, write it to the output directory, show the complete message
         file_name = os.path.splitext(os.path.basename(self.filename.get()))[0]
         outdir = self.outputname + "/" + file_name + "_Inverted.xlsx"
         df.to_excel(outdir)

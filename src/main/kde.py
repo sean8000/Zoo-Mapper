@@ -6,9 +6,9 @@ from tkinter import filedialog
 from tokenize import Double
 from numpy import double, true_divide
 import pandas as pd
-import rpy2.robjects as robjects
-from rpy2.robjects import NULL, pandas2ri
-from rpy2.robjects import r
+#import rpy2.robjects as robjects
+#from rpy2.robjects import NULL, pandas2ri
+#from rpy2.robjects import r
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
@@ -22,7 +22,7 @@ import json
 import os
 
 import os
-os.environ['R_HOME'] = 'C:\Program Files\R\R-4.3.1'
+#os.environ['R_HOME'] = 'C:\Program Files\R\R-4.3.1'
 
 import heatmappage
 # python -c "import os, sys; print(os.path.dirname(sys.executable))" prints your python path
@@ -54,8 +54,8 @@ class KDE_Page(tk.Frame):
             The page will be up and ready for the user to interact with
         """
         # Setting our variables
-        self.filename = NULL            # setting the file selection to NULL
-        self.outputname = NULL          # Setting the outpot name of the file to NULL
+        self.filename = None            # setting the file selection to NULL
+        self.outputname = None          # Setting the outpot name of the file to NULL
         self.tmp = tk.StringVar()       
         self.tmp.set("hello")
 
