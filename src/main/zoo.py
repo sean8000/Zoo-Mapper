@@ -1571,5 +1571,5 @@ class SheetView(tk.Tk, tk.Toplevel):
 
 
 app = ZooMapper()
-app.bind("<Configure>", StartPage.resize)
+#app.bind("<Configure>", StartPage.resize)
 app.mainloop()

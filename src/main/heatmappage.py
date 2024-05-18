@@ -631,7 +631,7 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.width, self.height = parent.winfo_width(), parent.winfo_height()
 
-        label = tk.Label(self, text="Zoo Mapper", font=LARGE_FONT, background=BACKGROUND_COLOR)
+        ZooMapperLabel = tk.Label(self, text="Zoo Mapper", font=LARGE_FONT, background=BACKGROUND_COLOR)
         self.grid(in_ = parent, row = 0, column = 0, columnspan = 3, rowspan = 3, sticky = NSEW)
 
         
@@ -653,8 +653,13 @@ class StartPage(tk.Frame):
                             command=lambda: controller.load_import(self), borderless=1)
             button3 = Button(self, text="Graph", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.show_frame(HeatMapPage), borderless=1)
-            button4 = Button(self, text="Peter was Here (Joins_Page)", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+            button4 = Button(self, text="Data Inversion", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.show_frame(Transformations_Page), borderless=1)
+            button5 = Button(self, text="Categorical Data", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
+                            command=lambda: controller.show_frame(Categories_Page), borderless=1)
+            button6 = Button(self, text="Data Joins", font = BUTTON_FONT, bg = BUTTON_BACKGROUND_COLOR, fg = BUTTON_FORGROUND_COLOR, overforeground = "green",
                             command=lambda: controller.show_frame(Joins_Page), borderless=1)
+            img = PIL.Image.open('resources/Logo.jpg')
             
         else:
             # Windows, and linux. Linux is not tested
@@ -662,31 +667,35 @@ class StartPage(tk.Frame):
                                 command=lambda: controller.get_spreadsheet())
             button2 = ttk.Button(self, text="Load Import", style="TButton",
                                 command=lambda: controller.load_import(self))
-            button3 = ttk.Button(self, text="Graph",
-                                 command=lambda: controller.show_frame(HeatMapPage))
-            button4 = ttk.Button(self, text="Peter was Here (Joins_Page)",
-                                 command=lambda: controller.show_frame(Joins_Page))
+            button3 = ttk.Button(self, text="Graph", style="TButton",
+                                    command=lambda: controller.show_frame(HeatMapPage))
+            button4 = ttk.Button(self, text="Data Inversion", style="TButton",
+                                command=lambda: controller.show_frame(Transformations_Page))
+            button5 = ttk.Button(self, text="Categorical Data", style="TButton",
+                                command=lambda: controller.show_frame(Categories_Page))
+            button6 = ttk.Button(self, text="Data Joins", style="TButton",
+                                command=lambda: controller.show_frame(Joins_Page))
             
-        button1.grid(row = 1, column = 0, sticky = S)
-        button2.grid(row = 2, column = 0, sticky = S)
-        button3.grid(row = 3, column = 0, sticky = S)
-        button4.grid(row = 4, column = 0, sticky = S)
+            # img = PIL.Image.open('resources/Logo.jpg') #for mac used for testing purposes.
+            img = PIL.Image.open('src/main/resources/Logo.jpg')
+
+        ZooMapperLabel.grid(row = 0, column = 0, sticky = NSEW)
+        button1.grid(row = 1, column = 0, sticky = N)
+        button2.grid(row = 2, column = 0, sticky = N)
+        button3.grid(row = 3, column = 0, sticky = N)
+        button4.grid(row = 4, column = 0, sticky = N)
+        button5.grid(row = 5, column = 0, sticky = N)
+        button6.grid(row = 6, column = 0, sticky = N)
+
+
+        # button1.grid(row = 1, column = 0, sticky = NSEW)
+        # button2.grid(row = 2, column = 0, sticky = NSEW)
+        # button3.grid(row = 3, column = 0, sticky = NSEW)
+        # button4.grid(row = 4, column = 0, sticky = NSEW)
+        # button5.grid(row = 5, column = 0, sticky = NSEW)
+        # button6.grid(row = 6, column = 0, sticky = NSEW)
         
-        """
-        button4.grid(row=4, column=0, sticky=N)#buttons
-
-        button5 = ttk.Button(self, text="Data Inversion",
-                            command=lambda: controller.show_frame(Transformations_Page))
-        button5.grid(row=5, column=0, sticky=N)
-
-        button6 = ttk.Button(self, text="Categorical Data",
-                            command=lambda: controller.show_frame(Categories_Page))
-        button6.grid(row=6, column=0, sticky=N)
-
-        button7 = ttk.Button(self, text="Data Joins",
-                            command=lambda: controller.show_frame(Joins_Page))
-        button7.grid(row=7, column=0, sticky=N)
-        
+        """"
         #removing button4
         buttons = {button1, button2, button3, button5, button6, button7}
 
@@ -700,17 +709,16 @@ class StartPage(tk.Frame):
 
         cols, rows = self.grid_size()
 
-        """
 
-        #PIL.Image.open... code was done on mac, the path may be diffrent on other machines.
-        img = PIL.Image.open('resources/Logo.jpg')
+        """
+    
         img = ImageTk.PhotoImage(img)
 
         enclosure_image = Label(self, image=img)
         enclosure_image.image = img #NEEDED because python forgets the image referance
         enclosure_image.grid(row = 0, column = 1, rowspan = 6)
         
-
+        cols, rows = self.grid_size()
         
         #     Scrollbar
         #     scrollbar = tk.Scrollbar(tk.Frame(self), orient=VERTICAL, command=(canvas).yview)
@@ -722,16 +730,14 @@ class StartPage(tk.Frame):
         
         def changeScale(event):
             
-            #Handles scaling of application as window is resized
-            
             pageWidth = event.width
             pageHeight = event.height
-            #print(str(pageWidth)+", "+str(pageHeight))
 
             #Label Position on grid
             #Original values going down are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
-            label.config(wraplength = math.floor(pageWidth/2))
-            label.grid(row = 0, column = 0, sticky = NSEW)
+            ZooMapperLabel.config(wraplength = math.floor(pageWidth/2))
+            ZooMapperLabel.grid(row = 0, column = 0, sticky = NSEW)
+            self.grid_rowconfigure(0, pad = pageHeight/4)
 
             #Original values are pageWidth/2, pageHeight/4, pageHeight/8, pageHeight/2
 
@@ -739,9 +745,9 @@ class StartPage(tk.Frame):
             # New value to accomodate more rows is pageheight/12, used because unsure how to add scroll wheel
             self.grid_rowconfigure(0, pad = pageHeight/4)
 
-            for r in range(1, row):
+            for r in range(1, rows):
                 self.grid_rowconfigure(r, minsize = math.floor(pageHeight/8.5))
-            for c in range(0, col):
+            for c in range(0, cols):
                 self.grid_columnconfigure(c, minsize = math.floor(pageWidth/2))
             
             
@@ -760,15 +766,30 @@ class StartPage(tk.Frame):
             
             # image = ImageOps.expand(image,border=8,fill='black')
                 
+            # img = PIL.Image.open('resources/Logo.jpg')
+            # img = ImageOps.expand(img,border=8,fill='black')
+
             img = PIL.Image.open('resources/Logo.jpg')
-            img = ImageOps.expand(img,border=8,fill='black')
-
-
+            img = ImageTk.PhotoImage(img)
 
             enclosure_image = Label(self, image=img)
             enclosure_image.image = img #NEEDED because python forgets the image referance
 
+            if(pageHeight < 507 or pageWidth < 800):
+                # print("______HI")
+                # print(event.widget.winfo_name())
+                # print(event.widget.winfo_parent())
+                # print(event.widget.winfo_children())
+                # print("height", event.height, "width", event.width)
 
+                enclosure_image.grid_forget()
+                self.grid_columnconfigure(0, minsize = pageWidth)
+                ZooMapperLabel.config(wraplength = math.floor(pageWidth*(4/5)))
+
+            else:
+                enclosure_image.grid(row = 0, column = 1, rowspan = 6)                
+
+            """
             if pageHeight < 507 and pageWidth/2 < 800:
                 # canvas.grid_forget()
                 # self.grid_columnconfigure(0, minsize = pageWidth)
@@ -778,38 +799,37 @@ class StartPage(tk.Frame):
                 enclosure_image.grid_forget()
                 self.grid_columnconfigure(0, minsize = pageWidth)
                 self.grid_rowconfigure(0, pad = 0)
-                label.config(wraplength = math.floor(pageWidth*(4/5)))
+                ZooMapperLabel.config(wraplength = math.floor(pageWidth*(4/5)))
             elif pageHeight < 507:
                 imgW, imgH = math.floor(800*(pageHeight/507)), pageHeight
-                image = image.resize((imgW, imgH))
-                canvas.config(width = imgW, height = imgH)
+                #img = img.resize((imgW, imgH))#idk
+                enclosure_image.config(width = imgW, height = imgH)
             elif pageWidth/2 < 800:
                 imgW, imgH = math.floor(pageWidth/2), math.floor(507*(pageWidth/1600))
-                image = image.resize((imgW, imgH))
-                canvas.config(width = imgW, height = imgH)
+                #img = img.resize((imgW, imgH))#idk
+                enclosure_image.config(width = imgW, height = imgH)
                 if pageWidth < 800:
                     self.grid_columnconfigure(0, minsize = pageWidth)
-                    canvas.grid(row = 5, column = 0, sticky = N)
+                    enclosure_image.grid(row = 5, column = 0, sticky = N)
                     self.grid_rowconfigure(0, pad = 0)
-                    label.config(wraplength = math.floor(pageWidth*(4/5)))
+                    ZooMapperLabel.config(wraplength = math.floor(pageWidth*(4/5)))
                 else:
-                    canvas.grid(row = 0, column = 1, rowspan = 6, sticky = "")
+                    enclosure_image.grid(row = 0, column = 1, rowspan = 6, sticky = "")
 
             if pageHeight >= 507 and pageWidth/2 >= 800:
                 imgW, imgH = 800, 507
-                image = image.resize((imgW, imgH))
-                canvas.config(width = imgW, height = imgH)
+                #img = img.resize((imgW, imgH))
+                enclosure_image.config(width = imgW, height = imgH)
+            """
             
-            
-            image = ImageTk.PhotoImage(image)
-            
-            canvas.background = image
-            bg = canvas.create_image(0, 0, anchor=tk.NW, image=image)
 
-            print("widget", event.widget)
-            print("height", event.height, "width", event.width)
+            # idk
+            # enclosure_image.background = img
+            # bg = enclosure_image.create_img(0, 0, anchor=tk.NW, image=img
 
-        parent.bind('Configure', changeScale)
+        parent.bind( "<Configure>", changeScale)#mac only?
+        # parent.bind('Configure', changeScale)
+
 
 
     def resize(event):
